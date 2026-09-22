@@ -1,0 +1,53 @@
+# =============================================================
+#  CODEOWNERS — ConecTEA
+# =============================================================
+#
+#  Define quem é automaticamente solicitado como revisor quando
+#  um arquivo daquele caminho é alterado num Pull Request.
+#
+#  ⚠️  STATUS: EM DEFINIÇÃO
+#
+#  Os times abaixo são PLACEHOLDERS. Nenhum usuário real foi
+#  inventado. Para ativar este arquivo:
+#
+#    1. Criar os times na organização ConecTEA
+#    2. Adicionar os integrantes reais a cada time
+#    3. Descomentar as linhas abaixo
+#    4. Habilitar "Require review from Code Owners" na proteção da main
+#
+#  Sintaxe: <padrão de caminho>   <@usuário ou @org/time>
+#  Vale a ÚLTIMA regra que casar com o arquivo.
+#
+# =============================================================
+
+
+# ── Padrão: tudo que não casar com nada mais específico ──
+# *                          @ConecTEA/admins
+
+
+# ── Configuração crítica: exige revisão de um Admin ──
+# /.github/                  @ConecTEA/admins
+# /.github/workflows/        @ConecTEA/admins
+# .gitignore                 @ConecTEA/admins
+# .env.example               @ConecTEA/admins
+
+
+# ── Banco de dados: migrations e políticas de acesso ──
+# /supabase/                 @ConecTEA/admins
+
+
+# ── Aplicação web ──
+# /apps/web/                 @ConecTEA/developers
+
+
+# ── Pacotes compartilhados ──
+# /packages/                 @ConecTEA/developers
+
+
+# ── Design system ──
+# /packages/ui/              @ConecTEA/developers @ConecTEA/designers
+
+
+# ── Documentação e ADRs ──
+# /docs/                     @ConecTEA/documentation
+# README.md                  @ConecTEA/documentation

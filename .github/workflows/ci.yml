@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # ───────────────────────────────────────────────────────────
+  #  Varredura de segredos.
+  #  Repositório privado não tem push protection nativo gratuito
+  #  (ver ADR-005), então este job é a nossa barreira automatizada.
+  #  NUNCA desative, pule ou marque como opcional.
+  # ───────────────────────────────────────────────────────────
+  seguranca:
+    name: Varredura de segredos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # histórico completo: o segredo pode estar em commit antigo
+
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ───────────────────────────────────────────────────────────
+  #  Qualidade de código.
+  #  Ativar quando a stack for definida (ADR-004) e o projeto
+  #  tiver package.json. Até lá o job apenas informa e passa.
+  # ───────────────────────────────────────────────────────────
+  qualidade:
+    name: Lint e build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verifica se o projeto já foi inicializado
+        id: check
+        run: |
+          if [ -f package.json ]; then
+            echo "pronto=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pronto=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Projeto ainda não inicializado (sem package.json). Fase 0 em andamento — ver ADR-004."
+          fi
+
+      - name: Setup Node
+        if: steps.check.outputs.pronto == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        if: steps.check.outputs.pronto == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.check.outputs.pronto == 'true'
+        run: npm run lint --if-present
+
+      - name: Verificação de tipos
+        if: steps.check.outputs.pronto == 'true'
+        run: npm run typecheck --if-present
+
+      - name: Build
+        if: steps.check.outputs.pronto == 'true'
+        run: npm run build --if-present
+
+      - name: Testes
+        if: steps.check.outputs.pronto == 'true'
+        run: npm test --if-present

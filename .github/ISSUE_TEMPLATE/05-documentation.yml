@@ -1,0 +1,47 @@
+name: 📚 Documentation
+description: Criar, corrigir ou atualizar documentação
+title: "docs: "
+labels: ["tipo: docs", "status: triagem"]
+body:
+  - type: dropdown
+    id: onde
+    attributes:
+      label: Onde fica a documentação?
+      options:
+        - conectea-vault (Obsidian)
+        - README de repositório
+        - ADR (docs/adr)
+        - Comentários / JSDoc no código
+        - Manual do usuário
+    validations:
+      required: true
+
+  - type: input
+    id: pagina
+    attributes:
+      label: Página / arquivo alvo
+      placeholder: "ex.: 08 - Arquitetura/Visão Geral.md"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: O que está faltando, errado ou desatualizado?
+    validations:
+      required: true
+
+  - type: textarea
+    id: conteudo
+    attributes:
+      label: Conteúdo sugerido
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: rede
+    attributes:
+      label: Rede de conhecimento
+      options:
+        - label: A página terá links internos [[ ]] para as páginas relacionadas (nada de documento isolado)
+          required: true

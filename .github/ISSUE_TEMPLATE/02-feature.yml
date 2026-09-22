@@ -1,0 +1,67 @@
+name: ✨ Feature Request
+description: Propor uma nova funcionalidade do produto
+title: "feat: "
+labels: ["tipo: feature", "status: triagem"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qual problema esta funcionalidade resolve?
+      description: Descreva a dor do usuário, não a solução técnica.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solucao
+    attributes:
+      label: Solução proposta
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: User Story
+      value: |
+        Como <tipo de usuário>,
+        quero <ação>,
+        para que <benefício>.
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Critérios de aceitação
+      value: |
+        - [ ] Dado ... quando ... então ...
+        - [ ] Dado ... quando ... então ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: fase
+    attributes:
+      label: Fase do roadmap
+      options:
+        - MVP
+        - V2
+        - V3
+        - Em definição
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: lgpd
+    attributes:
+      label: Impacto em dados pessoais
+      options:
+        - label: Esta funcionalidade trata dados pessoais sensíveis (saúde, diagnóstico) ou dados de menores de idade
+          required: false

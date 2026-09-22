@@ -1,0 +1,49 @@
+name: 🛠️ Improvement
+description: Melhorar algo que já existe (refatoração, performance, UX, acessibilidade)
+title: "improve: "
+labels: ["tipo: melhoria", "status: triagem"]
+body:
+  - type: textarea
+    id: situacao
+    attributes:
+      label: Situação atual
+      description: Como está hoje e por que incomoda.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Melhoria proposta
+    validations:
+      required: true
+
+  - type: textarea
+    id: beneficio
+    attributes:
+      label: Benefício esperado
+      description: Performance, legibilidade, acessibilidade, redução de custo, menos bugs...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de melhoria
+      options:
+        - Refatoração de código
+        - Performance
+        - Acessibilidade
+        - UX / UI
+        - Segurança
+        - Testes
+        - Developer Experience
+    validations:
+      required: true
+
+  - type: textarea
+    id: risco
+    attributes:
+      label: Riscos de regressão
+    validations:
+      required: false

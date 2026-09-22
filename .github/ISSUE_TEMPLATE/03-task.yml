@@ -1,0 +1,48 @@
+name: 🔧 Task
+description: Tarefa técnica, de configuração ou de infraestrutura
+title: "task: "
+labels: ["tipo: task", "status: triagem"]
+body:
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: Objetivo
+      description: O que precisa ser feito e por quê.
+    validations:
+      required: true
+
+  - type: textarea
+    id: escopo
+    attributes:
+      label: Escopo / subtarefas
+      value: |
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definição de pronto (Definition of Done)
+      value: |
+        - [ ] Código revisado e aprovado em PR
+        - [ ] CI passando
+        - [ ] Documentação atualizada no conectea-vault
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options:
+        - Frontend
+        - Backend / API
+        - Banco de Dados
+        - Infra / DevOps
+        - Segurança
+        - Documentação
+        - Design
+    validations:
+      required: true

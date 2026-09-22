@@ -1,0 +1,79 @@
+name: 🐞 Bug Report
+description: Relatar um comportamento incorreto do sistema
+title: "bug: "
+labels: ["tipo: bug", "status: triagem"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por relatar. Preencha o máximo possível — quanto melhor a descrição, mais rápido o conserto.
+        ⚠️ **Nunca cole tokens, senhas, chaves de API ou dados pessoais reais de usuários nesta issue.**
+
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descrição do problema
+      description: O que está acontecendo de errado?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproducao
+    attributes:
+      label: Passos para reproduzir
+      value: |
+        1. Vá até '...'
+        2. Clique em '...'
+        3. Observe o erro
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Comportamento esperado
+      description: O que deveria ter acontecido?
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Evidências (screenshots, logs, vídeo)
+      description: Cole imagens arrastando o arquivo. Anonimize qualquer dado pessoal antes.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: ambiente
+    attributes:
+      label: Ambiente
+      options:
+        - Local (desenvolvimento)
+        - Preview (Vercel — PR)
+        - Production
+        - Não sei
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gravidade
+    attributes:
+      label: Gravidade
+      options:
+        - Crítica — sistema inutilizável ou dado sensível exposto
+        - Alta — funcionalidade principal quebrada
+        - Média — funcionalidade secundária quebrada
+        - Baixa — incômodo visual ou cosmético
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checagens
+    attributes:
+      label: Checagens
+      options:
+        - label: Procurei e não encontrei outra issue relatando o mesmo bug
+          required: true
+        - label: Confirmo que não há segredos nem dados pessoais reais nesta issue
+          required: true

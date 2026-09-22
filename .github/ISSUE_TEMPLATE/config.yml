@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentação do projeto (Obsidian / conectea-vault)
+    url: https://github.com/ConecTEA/conectea-vault
+    about: Antes de abrir uma issue, verifique se o assunto já está documentado no vault.
+  - name: 💬 Dúvida ou discussão
+    url: https://github.com/orgs/ConecTEA/discussions
+    about: Para perguntas abertas e decisões ainda não amadurecidas, use Discussions.

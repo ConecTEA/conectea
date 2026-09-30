@@ -1,6 +1,8 @@
 // Gerado via `generate_typescript_types` a partir do schema do projeto Supabase `conectea-dev`
 // (conta RafaDm113 / rafaeldmifc@gmail.com, id bwevvpgvskbxvfnnyujr). Não editar manualmente —
 // regenerar sempre que o schema mudar. Preços em centavos (ver Entidades no vault).
+//
+// Pagamento é simulado (ADR-008) — não há mais campos/tabela ligados ao Stripe.
 
 export type Json =
   | string
@@ -29,8 +31,6 @@ export type Database = {
           plano_id: string
           responsavel_id: string
           status: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
         }
         Insert: {
           atualizado_em?: string
@@ -42,8 +42,6 @@ export type Database = {
           plano_id: string
           responsavel_id: string
           status?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
         }
         Update: {
           atualizado_em?: string
@@ -55,8 +53,6 @@ export type Database = {
           plano_id?: string
           responsavel_id?: string
           status?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
         }
         Relationships: [
           {
@@ -127,7 +123,6 @@ export type Database = {
           id: string
           nome: string
           preco_centavos: number
-          stripe_price_id: string | null
         }
         Insert: {
           ativo?: boolean
@@ -138,7 +133,6 @@ export type Database = {
           id?: string
           nome: string
           preco_centavos: number
-          stripe_price_id?: string | null
         }
         Update: {
           ativo?: boolean
@@ -149,7 +143,6 @@ export type Database = {
           id?: string
           nome?: string
           preco_centavos?: number
-          stripe_price_id?: string | null
         }
         Relationships: []
       }
@@ -410,8 +403,6 @@ export type Database = {
           pago_em: string | null
           responsavel_id: string
           status: string
-          stripe_checkout_session_id: string | null
-          stripe_payment_intent_id: string | null
           valor_total_centavos: number
         }
         Insert: {
@@ -422,8 +413,6 @@ export type Database = {
           pago_em?: string | null
           responsavel_id: string
           status?: string
-          stripe_checkout_session_id?: string | null
-          stripe_payment_intent_id?: string | null
           valor_total_centavos?: number
         }
         Update: {
@@ -434,8 +423,6 @@ export type Database = {
           pago_em?: string | null
           responsavel_id?: string
           status?: string
-          stripe_checkout_session_id?: string | null
-          stripe_payment_intent_id?: string | null
           valor_total_centavos?: number
         }
         Relationships: [
@@ -465,7 +452,6 @@ export type Database = {
           intervalo_count: number
           nome: string
           preco_centavos: number
-          stripe_price_id: string | null
         }
         Insert: {
           ativo?: boolean
@@ -476,7 +462,6 @@ export type Database = {
           intervalo_count?: number
           nome: string
           preco_centavos: number
-          stripe_price_id?: string | null
         }
         Update: {
           ativo?: boolean
@@ -487,7 +472,6 @@ export type Database = {
           intervalo_count?: number
           nome?: string
           preco_centavos?: number
-          stripe_price_id?: string | null
         }
         Relationships: []
       }
@@ -498,7 +482,6 @@ export type Database = {
           email: string
           id: string
           nome: string
-          stripe_customer_id: string | null
           telefone: string | null
         }
         Insert: {
@@ -507,7 +490,6 @@ export type Database = {
           email: string
           id: string
           nome: string
-          stripe_customer_id?: string | null
           telefone?: string | null
         }
         Update: {
@@ -516,52 +498,9 @@ export type Database = {
           email?: string
           id?: string
           nome?: string
-          stripe_customer_id?: string | null
           telefone?: string | null
         }
         Relationships: []
-      }
-      stripe_webhook_events: {
-        Row: {
-          id: string
-          processado_em: string
-          relacionado_assinatura_id: string | null
-          relacionado_pedido_id: string | null
-          stripe_event_id: string
-          tipo: string
-        }
-        Insert: {
-          id?: string
-          processado_em?: string
-          relacionado_assinatura_id?: string | null
-          relacionado_pedido_id?: string | null
-          stripe_event_id: string
-          tipo: string
-        }
-        Update: {
-          id?: string
-          processado_em?: string
-          relacionado_assinatura_id?: string | null
-          relacionado_pedido_id?: string | null
-          stripe_event_id?: string
-          tipo?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "stripe_webhook_events_relacionado_assinatura_id_fkey"
-            columns: ["relacionado_assinatura_id"]
-            isOneToOne: false
-            referencedRelation: "assinaturas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "stripe_webhook_events_relacionado_pedido_id_fkey"
-            columns: ["relacionado_pedido_id"]
-            isOneToOne: false
-            referencedRelation: "pedidos"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {

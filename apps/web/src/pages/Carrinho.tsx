@@ -2,17 +2,23 @@ import { Link } from 'react-router'
 import { Btn } from '../components/Btn'
 import { Alert, Card, EmptyState, Titulo } from '../components/ui'
 import { buscarBox } from '../data/boxes'
+import { combo, precoFinal } from '../data/promocoes'
 import { brl } from '../lib/format'
 import { useStore } from '../store'
 
 export default function Carrinho() {
-  const { carrinho, alterarQtd, removerDoCarrinho, desfazerRemocao, removido, escolherPlano } = useStore()
+  const { carrinho, alterarQtd, removerDoCarrinho, desfazerRemocao, removido, escolherPlano, descontoCombo, usuario } =
+    useStore()
 
   const linhas = carrinho.flatMap((i) => {
     const b = buscarBox(i.boxId)
-    return b ? [{ ...i, box: b }] : []
+    return b ? [{ ...i, box: b, preco: precoFinal(b) }] : []
   })
-  const total = linhas.reduce((s, l) => s + l.box.preco * l.qtd, 0)
+  const qtdTotal = linhas.reduce((s, l) => s + l.qtd, 0)
+  const subtotal = linhas.reduce((s, l) => s + l.preco * l.qtd, 0)
+  const desconto = descontoCombo()
+  const total = subtotal - desconto
+  const faltaParaCombo = combo.minimo - qtdTotal
 
   const aviso = removido ? (
     <div className="mb-4">
@@ -43,6 +49,17 @@ export default function Carrinho() {
     <div>
       <Titulo>Carrinho</Titulo>
       {aviso}
+      {faltaParaCombo > 0 ? (
+        <div className="mb-4">
+          <Alert variant="info">
+            Leve mais {faltaParaCombo} {faltaParaCombo === 1 ? 'box' : 'boxes'} e ganhe {combo.desconto}% de desconto no combo.
+          </Alert>
+        </div>
+      ) : (
+        <div className="mb-4">
+          <Alert variant="sucesso">Combo aplicado: {combo.desconto}% de desconto no total.</Alert>
+        </div>
+      )}
       <div className="grid gap-6 md:grid-cols-3">
         <ul className="space-y-3 md:col-span-2">
           {linhas.map((l) => (
@@ -50,9 +67,12 @@ export default function Carrinho() {
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <h2 className="text-lg">{l.box.nome}</h2>
-                  <p className="text-muted">{brl(l.box.preco)} cada</p>
+                  <p className="text-ink-soft">
+                    {brl(l.preco)} cada
+                    {l.preco < l.box.preco ? <span className="ml-2 text-sm line-through">{brl(l.box.preco)}</span> : null}
+                  </p>
                 </div>
-                <p className="text-lg font-semibold">{brl(l.box.preco * l.qtd)}</p>
+                <p className="text-lg font-semibold">{brl(l.preco * l.qtd)}</p>
               </div>
               <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2" role="group" aria-label={`Quantidade de ${l.box.nome}`}>
@@ -80,8 +100,14 @@ export default function Carrinho() {
             <dl className="mt-4 space-y-2">
               <div className="flex justify-between">
                 <dt>Subtotal</dt>
-                <dd>{brl(total)}</dd>
+                <dd>{brl(subtotal)}</dd>
               </div>
+              {desconto > 0 ? (
+                <div className="flex justify-between text-success">
+                  <dt>Desconto do combo ({combo.desconto}%)</dt>
+                  <dd>-{brl(desconto)}</dd>
+                </div>
+              ) : null}
               <div className="flex justify-between border-t border-border pt-2 text-xl font-semibold">
                 <dt>Total</dt>
                 <dd>{brl(total)}</dd>
@@ -89,10 +115,13 @@ export default function Carrinho() {
             </dl>
             <div className="mt-5 space-y-3">
               <Btn to="/checkout/endereco" block onClick={() => escolherPlano(null)}>
-                Continuar para o endereço
+                Comprar
               </Btn>
+              {!usuario ? (
+                <p className="text-center text-sm text-ink-soft">Para finalizar, você entra ou cria sua conta. O carrinho fica guardado.</p>
+              ) : null}
               <p className="text-center">
-                <Link to="/loja" className="inline-flex min-h-12 items-center text-primary-dark underline">
+                <Link to="/loja" className="inline-flex min-h-12 items-center text-violet underline">
                   Continuar comprando
                 </Link>
               </p>

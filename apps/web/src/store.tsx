@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { buscarBox } from './data/boxes'
+import { buscarBox, type Nivel } from './data/boxes'
 import {
   atividadesIniciais,
   buscarPlano,
@@ -7,6 +7,7 @@ import {
   type Atividade,
   type Pedido,
 } from './data/exemplos'
+import { combo, precoFinal } from './data/promocoes'
 import { hojeISO } from './lib/format'
 
 /*
@@ -15,7 +16,8 @@ import { hojeISO } from './lib/format'
 */
 
 export type Responsavel = { nome: string; email: string }
-export type Crianca = { nome: string; idade: string; diagnostico: string; gostos: string }
+export type Crianca = { id: string; nome: string; idade: string; diagnostico: string; gostos: string }
+export type NovaCrianca = Omit<Crianca, 'id'> & { id?: string }
 export type Endereco = {
   destinatario: string
   cep: string
@@ -38,7 +40,8 @@ type ItemCarrinho = { boxId: string; qtd: number }
 
 type Dados = {
   usuario: Responsavel | null
-  crianca: Crianca | null
+  criancas: Crianca[]
+  criancaAtivaId: string | null
   carrinho: ItemCarrinho[]
   removido: ItemCarrinho | null
   endereco: Endereco | null
@@ -51,7 +54,11 @@ type Dados = {
 
 const inicial: Dados = {
   usuario: null,
-  crianca: { nome: 'Lucas', idade: '6', diagnostico: 'TEA nível 1', gostos: 'trens, música, massinha' },
+  criancas: [
+    { id: 'c1', nome: 'Lucas', idade: '6', diagnostico: 'TEA nível 1', gostos: 'trens, música, massinha' },
+    { id: 'c2', nome: 'Ana', idade: '4', diagnostico: 'TEA nível 2', gostos: 'bolhas de sabão, cores' },
+  ],
+  criancaAtivaId: 'c1',
   carrinho: [],
   removido: null,
   endereco: null,
@@ -68,7 +75,7 @@ const inicial: Dados = {
   atividades: atividadesIniciais,
 }
 
-const CHAVE = 'conectea-prototipo'
+const CHAVE = 'conectea-prototipo-v2'
 
 function carregar(): Dados {
   try {
@@ -80,17 +87,31 @@ function carregar(): Dados {
   return inicial
 }
 
+export const nivelDaCrianca = (c: Pick<Crianca, 'diagnostico'> | null | undefined): Nivel | null => {
+  const m = c?.diagnostico.match(/nível (\d)/i)
+  const n = m ? Number(m[1]) : null
+  return n === 1 || n === 2 || n === 3 ? n : null
+}
+
+type Linha = { nome: string; qtd: number; preco: number }
+
 type Store = Dados & {
+  criancaAtiva: Crianca | null
   entrar: (email: string) => void
   sair: () => void
-  salvarCrianca: (c: Crianca) => void
+  atualizarUsuario: (u: Partial<Responsavel>) => void
+  salvarCrianca: (c: NovaCrianca) => string
+  removerCrianca: (id: string) => void
+  selecionarCrianca: (id: string) => void
   adicionarAoCarrinho: (boxId: string) => void
   alterarQtd: (boxId: string, qtd: number) => void
   removerDoCarrinho: (boxId: string) => void
   desfazerRemocao: () => void
   salvarEndereco: (e: Endereco) => void
   escolherPlano: (planoId: string | null) => void
-  itensCheckout: () => { nome: string; qtd: number; preco: number }[]
+  linhasCarrinho: () => Linha[]
+  descontoCombo: () => number
+  itensCheckout: () => Linha[]
   totalCheckout: () => number
   quantidadeCarrinho: () => number
   finalizarPedido: (forma: string) => void
@@ -110,17 +131,33 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }, [d])
 
-  const itensCheckout = () => {
+  const linhasCarrinho = (): Linha[] =>
+    d.carrinho.flatMap((i) => {
+      const b = buscarBox(i.boxId)
+      return b ? [{ nome: b.nome, qtd: i.qtd, preco: precoFinal(b) }] : []
+    })
+
+  const descontoCombo = () => {
+    if (d.planoCheckout) return 0
+    const linhas = linhasCarrinho()
+    const qtd = linhas.reduce((s, l) => s + l.qtd, 0)
+    const sub = linhas.reduce((s, l) => s + l.preco * l.qtd, 0)
+    return qtd >= combo.minimo ? Math.round(sub * combo.desconto) / 100 : 0
+  }
+
+  const itensCheckout = (): Linha[] => {
     const plano = buscarPlano(d.planoCheckout)
     if (plano) return [{ nome: `Plano ${plano.nome}`, qtd: 1, preco: plano.preco }]
-    return d.carrinho.flatMap((i) => {
-      const b = buscarBox(i.boxId)
-      return b ? [{ nome: b.nome, qtd: i.qtd, preco: b.preco }] : []
-    })
+    const linhas = linhasCarrinho()
+    const desc = descontoCombo()
+    return desc > 0 ? [...linhas, { nome: `Desconto do combo (${combo.desconto}%)`, qtd: 1, preco: -desc }] : linhas
   }
+
+  const criancaAtiva = d.criancas.find((c) => c.id === d.criancaAtivaId) ?? d.criancas[0] ?? null
 
   const store: Store = {
     ...d,
+    criancaAtiva,
     entrar: (email) => {
       const local = email.split('@')[0]
       const nome =
@@ -130,7 +167,29 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setD((x) => ({ ...x, usuario: { nome, email } }))
     },
     sair: () => setD((x) => ({ ...x, usuario: null, carrinho: [], planoCheckout: null })),
-    salvarCrianca: (c) => setD((x) => ({ ...x, crianca: c })),
+    atualizarUsuario: (u) => setD((x) => (x.usuario ? { ...x, usuario: { ...x.usuario, ...u } } : x)),
+    salvarCrianca: (c) => {
+      const id = c.id ?? `c${Date.now()}`
+      setD((x) => {
+        const existe = x.criancas.some((k) => k.id === id)
+        const criancas = existe
+          ? x.criancas.map((k) => (k.id === id ? { ...c, id } : k))
+          : [...x.criancas, { ...c, id }]
+        return { ...x, criancas, criancaAtivaId: x.criancaAtivaId ?? id }
+      })
+      return id
+    },
+    removerCrianca: (id) =>
+      setD((x) => {
+        const criancas = x.criancas.filter((k) => k.id !== id)
+        return {
+          ...x,
+          criancas,
+          criancaAtivaId: x.criancaAtivaId === id ? (criancas[0]?.id ?? null) : x.criancaAtivaId,
+          atividades: x.atividades.filter((a) => a.criancaId !== id),
+        }
+      }),
+    selecionarCrianca: (id) => setD((x) => ({ ...x, criancaAtivaId: id })),
     adicionarAoCarrinho: (boxId) =>
       setD((x) => {
         const ja = x.carrinho.find((i) => i.boxId === boxId)
@@ -154,6 +213,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setD((x) => (x.removido ? { ...x, carrinho: [...x.carrinho, x.removido], removido: null } : x)),
     salvarEndereco: (endereco) => setD((x) => ({ ...x, endereco })),
     escolherPlano: (planoCheckout) => setD((x) => ({ ...x, planoCheckout })),
+    linhasCarrinho,
+    descontoCombo,
     itensCheckout,
     totalCheckout: () => itensCheckout().reduce((s, i) => s + i.preco * i.qtd, 0),
     quantidadeCarrinho: () => d.carrinho.reduce((s, i) => s + i.qtd, 0),
@@ -163,24 +224,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         const numero = Math.max(1000, ...x.pedidos.map((p) => p.numero)) + 1
         const e = x.endereco
         const endereco = e ? `${e.rua}, ${e.numero}, ${e.bairro}, ${e.cidade}, ${e.estado}` : ''
-        const pedido: Pedido = {
-          numero,
-          data: hojeISO(),
-          itens,
-          total: itens.reduce((s, i) => s + i.preco * i.qtd, 0),
-          status: 'Recebido',
-          endereco,
-          forma,
-        }
+        const total = Math.round(itens.reduce((s, i) => s + i.preco * i.qtd, 0) * 100) / 100
+        const pedido: Pedido = { numero, data: hojeISO(), itens, total, status: 'Recebido', endereco, forma }
         const plano = buscarPlano(x.planoCheckout)
         const assinatura: Assinatura | null = plano
-          ? {
-              planoId: plano.id,
-              inicio: hojeISO(),
-              proximaCobranca: hojeISO(),
-              forma,
-              proximaBox: 'Box Calma',
-            }
+          ? { planoId: plano.id, inicio: hojeISO(), proximaCobranca: hojeISO(), forma, proximaBox: 'Box Calma' }
           : x.assinatura
         return {
           ...x,

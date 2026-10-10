@@ -10,9 +10,9 @@ const SELECIONE = 'Selecione uma opção'
 const diagnosticos = [SELECIONE, 'Prefiro não informar', 'TEA nível 1', 'TEA nível 2', 'TEA nível 3', 'Em investigação']
 
 type Props = {
-  inicial?: Crianca | null
+  inicial?: Partial<Crianca> | null
   rotuloSalvar: string
-  onSalvar: (c: Crianca) => void
+  onSalvar: (c: Omit<Crianca, 'id'>) => void
   onCancelar: () => void
 }
 

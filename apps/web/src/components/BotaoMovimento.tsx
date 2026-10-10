@@ -13,7 +13,7 @@ export function BotaoMovimento({ escuro = false }: { escuro?: boolean }) {
         aplicarMovimento(!reduzido)
         setReduzido(!reduzido)
       }}
-      className={`inline-flex min-h-12 items-center rounded-xl border px-4 text-sm font-semibold ${
+      className={`inline-flex min-h-12 items-center rounded-xl border-2 px-4 text-sm font-semibold ${
         escuro ? 'border-white/40 text-white hover:bg-white/10' : 'border-line text-ink hover:bg-lilac'
       }`}
     >
@@ -21,3 +21,5 @@ export function BotaoMovimento({ escuro = false }: { escuro?: boolean }) {
     </button>
   )
 }
+
+export const Ajustes = BotaoMovimento

@@ -10,8 +10,10 @@ export default function Login() {
   const { entrar } = useStore()
   const nav = useNavigate()
   const loc = useLocation()
-  const aviso = (loc.state as { aviso?: string; de?: string } | null)?.aviso
-  const destino = (loc.state as { de?: string } | null)?.de ?? '/inicio'
+  const estado = loc.state as { aviso?: string; de?: string; motivo?: string } | null
+  const aviso = estado?.aviso
+  const destino = estado?.de ?? '/inicio'
+  const motivo = estado?.motivo
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -46,6 +48,11 @@ export default function Login() {
     <div className="mx-auto max-w-[480px]">
       <Card>
         <h1 className="text-2xl">Entrar</h1>
+        {motivo === 'compra' ? (
+          <div className="mt-4">
+            <Alert variant="info">Para finalizar a compra, entre ou crie sua conta. Seu carrinho foi guardado.</Alert>
+          </div>
+        ) : null}
         {aviso ? (
           <div className="mt-4">
             <Alert variant="sucesso">{aviso}</Alert>
@@ -85,7 +92,7 @@ export default function Login() {
           <Link to="/recuperar-senha" className="inline-flex min-h-12 items-center text-primary-dark underline">
             Esqueci minha senha
           </Link>
-          <Link to="/cadastro" className="inline-flex min-h-12 items-center text-primary-dark underline">
+          <Link to="/cadastro" state={estado} className="inline-flex min-h-12 items-center text-primary-dark underline">
             Ainda não tenho conta
           </Link>
         </div>

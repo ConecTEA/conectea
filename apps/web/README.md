@@ -19,7 +19,7 @@ Outros comandos: `pnpm build` (tipos + build) e `pnpm typecheck`.
 
 - **Entrar:** qualquer e-mail válido e qualquer senha. A senha `errada` mostra o erro de login.
 - **Cadastro:** o e-mail `marina@exemplo.com` mostra o erro "já cadastrado".
-- **Compra:** Loja → Detalhe → Carrinho → Endereço → Pagamento → Confirmação → Meus pedidos.
+- **Compra:** Loja → Detalhe → Carrinho → Comprar. Nesse ponto o login é pedido e o carrinho continua guardado. Depois: Endereço → Pagamento → Confirmação → Meus pedidos.
 - **Assinatura:** Planos → Endereço → Pagamento → Minha assinatura.
 - O estado é guardado em `sessionStorage` só para o recarregamento não deslogar você. Feche a aba para zerar.
 
@@ -35,33 +35,56 @@ Outros comandos: `pnpm build` (tipos + build) e `pnpm typecheck`.
 | Campos de formulário | `src/components/Field.tsx` |
 | Alertas, cartões, selos, vazio, etapas | `src/components/ui.tsx` |
 | Mensagens de erro padrão | `src/lib/validate.ts` |
-| Dados iniciais (responsável, criança, assinatura) | `src/store.tsx`, constante `inicial` |
+| Dados iniciais (responsável, crianças, assinatura) | `src/store.tsx`, constante `inicial` |
+| Promoções e combo | `src/data/promocoes.ts` |
+| Tutoriais (e onde ligar um vídeo) | `src/data/tutoriais.ts`, campo `videoUrl` |
+| Menu do perfil (canto superior direito) | `src/components/MenuPerfil.tsx` |
 | Rotas | `src/App.tsx` |
 | Uma tela | `src/pages/<Tela>.tsx` |
 
 ## Telas
 
+Abertas a todos (só pedem conta na hora de comprar):
+
 | Rota | Arquivo |
 |---|---|
 | `/` | `Home.tsx` |
+| `/loja` (filtro `?nivel=1`, `2` ou `3`) | `Catalogo.tsx` |
+| `/loja/box/:id` | `DetalheBox.tsx` |
+| `/promocoes` | `Promocoes.tsx` |
+| `/carrinho` | `Carrinho.tsx` |
+| `/assinatura/planos` | `Planos.tsx` |
+| `/tutoriais` | `Tutoriais.tsx` |
+| `/tutoriais/:id` | `Tutorial.tsx` |
+| `/suporte` | `Suporte.tsx` |
+
+Entrada:
+
+| Rota | Arquivo |
+|---|---|
 | `/login` | `Login.tsx` |
 | `/cadastro` | `Cadastro.tsx` |
 | `/recuperar-senha` | `RecuperarSenha.tsx` |
+
+Exigem conta:
+
+| Rota | Arquivo |
+|---|---|
 | `/inicio` | `Inicio.tsx` |
-| `/crianca/cadastro` | `CadastroCrianca.tsx` |
-| `/crianca/perfil` | `PerfilCrianca.tsx` |
-| `/loja` | `Catalogo.tsx` |
-| `/loja/box/:id` | `DetalheBox.tsx` |
-| `/carrinho` | `Carrinho.tsx` |
+| `/perfil` | `Perfil.tsx` |
+| `/criancas` | `Criancas.tsx` |
+| `/criancas/nova` | `CadastroCrianca.tsx` |
+| `/criancas/:id/editar` | `EditarCrianca.tsx` |
+| `/acompanhamento` | `Acompanhamento.tsx` |
+| `/atividades/registrar` | `RegistrarAtividade.tsx` |
+| `/atividades/historico` | `HistoricoAtividades.tsx` |
+| `/assinatura/minha` | `MinhaAssinatura.tsx` |
+| `/pedidos` | `MeusPedidos.tsx` |
 | `/checkout/endereco` | `Endereco.tsx` |
 | `/checkout/pagamento` | `Pagamento.tsx` |
 | `/checkout/confirmacao` | `ConfirmacaoPedido.tsx` |
-| `/pedidos` | `MeusPedidos.tsx` |
-| `/assinatura/planos` | `Planos.tsx` |
-| `/assinatura/minha` | `MinhaAssinatura.tsx` |
-| `/atividades/registrar` | `RegistrarAtividade.tsx` |
-| `/atividades/historico` | `HistoricoAtividades.tsx` |
-| `/suporte` | `Suporte.tsx` |
+
+`/crianca/perfil` e `/crianca/cadastro` ainda existem e redirecionam para `/criancas` e `/criancas/nova`.
 
 ## Regras do design system
 

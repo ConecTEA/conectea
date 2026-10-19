@@ -8,10 +8,11 @@ import { hojeISO } from '../lib/format'
 import { msg, temErro, vazio, type Erros } from '../lib/validate'
 import { useStore } from '../store'
 
-const opcoes = [...boxes.flatMap((b) => b.brinquedos.map((t) => t.nome)), 'Outra']
+const opcoes = [...new Set(boxes.flatMap((b) => b.brinquedos.map((t) => t.nome))), 'Outra']
 
 export default function RegistrarAtividade() {
-  const { registrarAtividade } = useStore()
+  const { registrarAtividade, criancas, criancaAtiva } = useStore()
+  const [criancaId, setCriancaId] = useState(criancaAtiva?.id ?? '')
   const nav = useNavigate()
   const [data, setData] = useState(hojeISO())
   const [atividade, setAtividade] = useState(opcoes[0])
@@ -26,7 +27,7 @@ export default function RegistrarAtividade() {
     if (vazio(descricao)) n.descricao = msg.obrigatorio
     setErros(n)
     if (temErro(n)) return
-    registrarAtividade({ data, atividade, descricao: descricao.trim(), observacoes: obs.trim() || undefined })
+    registrarAtividade({ criancaId: criancaId || undefined, data, atividade, descricao: descricao.trim(), observacoes: obs.trim() || undefined })
     nav('/atividades/historico', { state: { salvo: true } })
   }
 
@@ -35,6 +36,28 @@ export default function RegistrarAtividade() {
       <Titulo apoio="Registre apenas o que você achar útil.">Registrar atividade</Titulo>
       <Card>
         <form onSubmit={enviar} noValidate className="space-y-4">
+          {criancas.length > 1 ? (
+            <div>
+              <p id="rotulo-crianca" className="mb-1 font-medium">
+                Criança <span className="text-ink-soft">(obrigatório)</span>
+              </p>
+              <div role="group" aria-labelledby="rotulo-crianca" className="flex flex-wrap gap-2">
+                {criancas.map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    aria-pressed={criancaId === c.id}
+                    onClick={() => setCriancaId(c.id)}
+                    className={`min-h-12 rounded-full border-2 px-5 font-semibold transition ${
+                      criancaId === c.id ? 'border-violet bg-violet text-white' : 'border-line bg-surface hover:bg-lilac'
+                    }`}
+                  >
+                    {c.nome}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="max-w-[240px]">
             <Field label="Data" id="data" type="date" required value={data} onChange={(e: ChangeEvent<HTMLInputElement>) => setData(e.target.value)} error={erros.data} />
           </div>

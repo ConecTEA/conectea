@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 import { Btn } from '../components/Btn'
 import { Field, SenhaField } from '../components/Field'
 import { Card } from '../components/ui'
@@ -8,6 +8,8 @@ import { emailValido, msg, temErro, vazio, type Erros } from '../lib/validate'
 
 export default function Cadastro() {
   const nav = useNavigate()
+  const loc = useLocation()
+  const estado = loc.state as { de?: string; motivo?: string } | null
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -31,7 +33,7 @@ export default function Cadastro() {
     if (!aceite) n.aceite = 'É necessário aceitar para continuar.'
     setErros(n)
     if (temErro(n)) return
-    nav('/login', { state: { aviso: 'Sua conta foi criada. Agora entre.' } })
+    nav('/login', { state: { ...estado, aviso: 'Sua conta foi criada. Agora entre.' } })
   }
 
   const on = (set: (v: string) => void) => (e: ChangeEvent<HTMLInputElement>) => set(e.target.value)
@@ -111,7 +113,7 @@ export default function Cadastro() {
           </Btn>
         </form>
         <p className="mt-4 text-center">
-          <Link to="/login" className="inline-flex min-h-12 items-center text-primary-dark underline">
+          <Link to="/login" state={estado} className="inline-flex min-h-12 items-center text-primary-dark underline">
             Já tenho conta
           </Link>
         </p>

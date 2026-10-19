@@ -86,6 +86,7 @@ export const pedidosIniciais: Pedido[] = [
 ]
 
 export type Atividade = {
+  criancaId?: string
   id: number
   data: string
   atividade: string
@@ -95,19 +96,36 @@ export type Atividade = {
 
 export const atividadesIniciais: Atividade[] = [
   {
+    id: 5,
+    criancaId: 'c2',
+    data: '2026-10-07',
+    atividade: 'Bolhas de sabão',
+    descricao: 'Soprei bolhas e ela tentou pegá-las com as mãos. Riu bastante.',
+  },
+  {
+    id: 4,
+    criancaId: 'c1',
+    data: '2026-10-05',
+    atividade: 'Blocos de encaixe grandes',
+    descricao: 'Montamos uma torre de quatro blocos seguindo as cores.',
+  },
+  {
     id: 3,
+    criancaId: 'c1',
     data: '2026-09-28',
     atividade: 'Massinha de modelar',
     descricao: 'Brincamos de fazer bolinhas e cobrinhas juntos por um tempo. Ele pediu para repetir no final.',
   },
   {
     id: 2,
+    criancaId: 'c1',
     data: '2026-09-26',
     atividade: 'Bola de textura macia',
     descricao: 'Usamos a bola antes de dormir, em silêncio.',
   },
   {
     id: 1,
+    criancaId: 'c1',
     data: '2026-09-22',
     atividade: 'Outra',
     descricao: 'Ouvimos músicas de trem e montamos uma pista com blocos.',

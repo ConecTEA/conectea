@@ -13,10 +13,10 @@ const mover = (k: number) => ({
 })
 
 const passos = [
-  { t: 'Cadastre', d: 'Crie sua conta e cadastre a criança.', cor: 'bg-lilac' },
-  { t: 'Escolha', d: 'Veja as boxes e o que cada brinquedo estimula.', cor: 'bg-lemon' },
-  { t: 'Assine ou compre', d: 'Escolha um plano ou compre uma box.', cor: 'bg-aqua' },
-  { t: 'Registre', d: 'Anote as atividades feitas com a criança.', cor: 'bg-peach' },
+  { t: 'Explore', d: 'Veja boxes, promoções e tutoriais sem criar conta.', cor: 'bg-lilac' },
+  { t: 'Escolha', d: 'Compare as boxes por nível e veja o que cada brinquedo estimula.', cor: 'bg-lemon' },
+  { t: 'Compre ou assine', d: 'Entre ou crie sua conta só na hora de comprar.', cor: 'bg-aqua' },
+  { t: 'Acompanhe', d: 'Cadastre a criança e anote as atividades feitas.', cor: 'bg-peach' },
 ]
 
 // Peças do herói: encaixam ao carregar e depois flutuam devagar.

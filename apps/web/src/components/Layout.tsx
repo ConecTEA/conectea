@@ -29,8 +29,6 @@ const itensLogado: Item[] = [
 ]
 
 // Barra inferior (celular): cinco destinos.
-const barraVisitante = [itensVisitante[0], itensVisitante[1], itensVisitante[2], itensVisitante[3], itensVisitante[4]]
-const barraLogado = [itensLogado[0], itensLogado[1], itensLogado[2], itensLogado[3], itensLogado[4]]
 
 // Link de atalho: foca o conteúdo sem mexer na rota (funciona também com HashRouter).
 const irParaConteudo = (e: React.MouseEvent) => {
@@ -70,7 +68,6 @@ export function Layout() {
   }, [])
 
   const itens = usuario ? itensLogado : itensVisitante
-  const barra = usuario ? barraLogado : barraVisitante
   const qtd = quantidadeCarrinho()
   const fazerSair = () => {
     setAberto(false)
@@ -209,14 +206,14 @@ export function Layout() {
         </div>
       ) : null}
 
-      <main id="conteudo" tabIndex={-1} className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-8 pb-28 md:pb-12">
+      <main id="conteudo" tabIndex={-1} className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-8 pb-12">
         <div key={loc.pathname} className="tela-entra">
           <Outlet />
         </div>
       </main>
 
       <footer className="bg-ink text-white">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-4 py-8 pb-24 md:flex-row md:items-center md:justify-between md:pb-8">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-4 px-4 py-8 md:flex-row md:items-center md:justify-between">
           <div>
             <Logo claro />
             <p className="text-sm text-white/80">Projeto acadêmico. Nenhum dado real é coletado nem cobrado.</p>
@@ -225,24 +222,6 @@ export function Layout() {
         </div>
       </footer>
 
-      <nav aria-label="Navegação inferior" className="fixed inset-x-0 bottom-0 z-30 border-t-2 border-line bg-surface md:hidden">
-        <ul className="grid h-16 grid-cols-5">
-          {barra.map((i) => (
-            <li key={i.to}>
-              <NavLink
-                to={i.to}
-                className={({ isActive }) =>
-                  `flex h-16 items-center justify-center border-t-4 px-1 text-center text-xs ${
-                    isActive ? 'border-violet font-bold text-violet' : 'border-transparent font-medium'
-                  }`
-                }
-              >
-                {i.rotulo}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </div>
   )
 }

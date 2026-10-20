@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Aviso alterações salvas</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Figtree:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap">
+<style>
+body{margin:0;background:#FBFAF7;color:#14142B;font-family:Figtree,system-ui,sans-serif;font-size:17px;line-height:1.55}
+h1,h2,h3,p{margin:0}
+a{color:#4B2FE0}
+@keyframes dc-entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+body{animation:dc-entra .35s ease-out both}
+a,button{transition:background-color .2s ease,box-shadow .2s ease,transform .2s ease,filter .2s ease}
+a:hover{filter:brightness(.96)}
+@media (prefers-reduced-motion:reduce){body{animation:none}a,button{transition:none}}
+</style>
+</helmet>
+<div style="width:100%;min-height:200px;background:#FBFAF7;display:flex;flex-direction:column;">
+<div style="flex:1;display:flex;align-items:center;justify-content:center"><div style="display:flex;gap:14px;align-items:center;background:#D3F5F0;border-radius:999px;padding:12px 28px 12px 12px;"><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;background:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#12805C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><p style="margin:0;font-size:16px;line-height:1.45">Alterações salvas.</p></div></div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":480,"height":200}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

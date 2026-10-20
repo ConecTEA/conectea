@@ -1,8 +1,8 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+﻿import { useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { Btn } from '../components/Btn'
 import { Field, SenhaField } from '../components/Field'
-import { Card } from '../components/ui'
+import { Card, Titulo } from '../components/ui'
 import { IconCheck } from '../components/Icons'
 import { emailValido, msg, temErro, vazio, type Erros } from '../lib/validate'
 
@@ -39,9 +39,10 @@ export default function Cadastro() {
   const on = (set: (v: string) => void) => (e: ChangeEvent<HTMLInputElement>) => set(e.target.value)
 
   return (
-    <div className="mx-auto max-w-[480px]">
+    <>
+    <Titulo apoio="Pedimos a conta na hora de comprar. Aqui vai só o necessário.">Criar conta</Titulo>
+    <div className="mx-auto max-w-[540px]">
       <Card>
-        <h1 className="text-2xl">Criar conta</h1>
         <form onSubmit={enviar} noValidate className="mt-5 space-y-4">
           <Field label="Nome do responsável" id="nome" autoComplete="name" required value={nome} onChange={on(setNome)} error={erros.nome} />
           <Field
@@ -91,11 +92,11 @@ export default function Cadastro() {
               />
               <span>
                 Li e aceito os{' '}
-                <Link to="#" className="text-primary-dark underline">
+                <Link to="#" className="font-extrabold text-violet underline">
                   Termos de Uso
                 </Link>{' '}
                 e a{' '}
-                <Link to="#" className="text-primary-dark underline">
+                <Link to="#" className="font-extrabold text-violet underline">
                   Política de Privacidade
                 </Link>
                 .
@@ -113,11 +114,12 @@ export default function Cadastro() {
           </Btn>
         </form>
         <p className="mt-4 text-center">
-          <Link to="/login" state={estado} className="inline-flex min-h-12 items-center text-primary-dark underline">
+          <Link to="/login" state={estado} className="inline-flex min-h-12 items-center font-extrabold text-violet underline">
             Já tenho conta
           </Link>
         </p>
       </Card>
     </div>
+    </>
   )
 }

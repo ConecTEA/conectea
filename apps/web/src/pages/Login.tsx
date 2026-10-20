@@ -1,8 +1,8 @@
-import { useState, type FormEvent } from 'react'
+﻿import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { Btn } from '../components/Btn'
 import { Field, SenhaField } from '../components/Field'
-import { Alert, Card } from '../components/ui'
+import { Alert, Card, Titulo } from '../components/ui'
 import { emailValido, msg, temErro, vazio, type Erros } from '../lib/validate'
 import { useStore } from '../store'
 
@@ -45,9 +45,11 @@ export default function Login() {
   }
 
   return (
-    <div className="mx-auto max-w-[480px]">
+    <>
+    <Titulo>Entrar</Titulo>
+    <div className="mx-auto max-w-[500px]">
       <Card>
-        <h1 className="text-2xl">Entrar</h1>
+        <h2 className="text-3xl">Entrar na conta</h2>
         {motivo === 'compra' ? (
           <div className="mt-4">
             <Alert variant="info">Para finalizar a compra, entre ou crie sua conta. Seu carrinho foi guardado.</Alert>
@@ -89,14 +91,15 @@ export default function Login() {
           </Btn>
         </form>
         <div className="mt-4 flex flex-col items-center">
-          <Link to="/recuperar-senha" className="inline-flex min-h-12 items-center text-primary-dark underline">
+          <Link to="/recuperar-senha" className="inline-flex min-h-12 items-center font-extrabold text-violet underline">
             Esqueci minha senha
           </Link>
-          <Link to="/cadastro" state={estado} className="inline-flex min-h-12 items-center text-primary-dark underline">
+          <Link to="/cadastro" state={estado} className="inline-flex min-h-12 items-center font-extrabold text-violet underline">
             Ainda não tenho conta
           </Link>
         </div>
       </Card>
     </div>
+    </>
   )
 }

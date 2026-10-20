@@ -1,6 +1,6 @@
 import { Btn } from '../components/Btn'
 import { IconCheck } from '../components/Icons'
-import { Card, EmptyState, Stepper } from '../components/ui'
+import { Card, EmptyState, Stepper, Titulo } from '../components/ui'
 import { brl } from '../lib/format'
 import { useStore } from '../store'
 import { passosCompra } from './Endereco'
@@ -14,7 +14,11 @@ export default function ConfirmacaoPedido() {
   }
 
   return (
-    <div className="mx-auto max-w-[560px]">
+    <>
+    <Titulo>
+      Pedido <em>registrado.</em>
+    </Titulo>
+    <div className="mx-auto max-w-[640px]">
       <Stepper atual={3} passos={passosCompra} />
       <Card className="relative overflow-hidden text-center">
         {/* Peças que se encaixam ao abrir a tela (desligadas com "Reduzir animações") */}
@@ -27,8 +31,7 @@ export default function ConfirmacaoPedido() {
         <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-success text-white">
           <IconCheck width={28} height={28} />
         </span>
-        <h1 className="mt-4 text-3xl md:text-4xl">Pedido registrado.</h1>
-        <p className="mt-1 text-muted">Este é um pedido de demonstração.</p>
+        <p className="mt-3 text-ink-soft">Este é um pedido de demonstração.</p>
 
         <dl className="mt-6 space-y-3 text-left">
           <div className="flex justify-between gap-3">
@@ -75,5 +78,6 @@ export default function ConfirmacaoPedido() {
         </div>
       </Card>
     </div>
+    </>
   )
 }

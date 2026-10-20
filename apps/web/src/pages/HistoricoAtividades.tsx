@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router'
 import { Btn } from '../components/Btn'
-import { Alert, Card, EmptyState } from '../components/ui'
+import { Alert, Card, EmptyState, Titulo } from '../components/ui'
 import { dataBR } from '../lib/format'
 import { useStore } from '../store'
 
@@ -19,11 +19,9 @@ export default function HistoricoAtividades() {
   const nomeDe = (id?: string) => criancas.find((c) => c.id === id)?.nome
 
   return (
-    <div className="mx-auto max-w-[760px]">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-3xl md:text-4xl">Histórico de atividades</h1>
-        <Btn to="/atividades/registrar">Registrar nova atividade</Btn>
-      </div>
+    <>
+    <Titulo acao={<Btn to="/atividades/registrar" variant="ink">Registrar nova atividade</Btn>}>Histórico de atividades</Titulo>
+    <div className="mx-auto max-w-[860px]">
 
       {salvo ? (
         <div className="mb-4">
@@ -39,8 +37,8 @@ export default function HistoricoAtividades() {
               type="button"
               aria-pressed={filtro === c.id}
               onClick={() => setFiltro(c.id)}
-              className={`min-h-12 rounded-full border-2 px-5 font-semibold transition ${
-                filtro === c.id ? 'border-violet bg-violet text-white' : 'border-line bg-surface hover:bg-lilac'
+              className={`min-h-12 rounded-full border-2 px-6 font-extrabold transition ${
+                filtro === c.id ? 'border-ink bg-ink text-white' : 'border-[#E4DED3] bg-surface hover:bg-lilac'
               }`}
             >
               {c.nome}
@@ -63,11 +61,11 @@ export default function HistoricoAtividades() {
             const aberta = abertas.includes(a.id)
             const nome = nomeDe(a.criancaId)
             return (
-              <Card as="li" key={a.id}>
+              <Card as="li" key={a.id} className="!rounded-[40px_40px_40px_12px] !p-6">
                 <div className="flex flex-col gap-1 sm:flex-row sm:gap-6">
                   <p className="shrink-0 font-semibold sm:w-28">{dataBR(a.data)}</p>
                   <div className="min-w-0 flex-1">
-                    <h2 className="text-base">
+                    <h2 className="text-2xl">
                       {a.atividade}
                       {nome ? <span className="ml-2 rounded-full bg-lilac px-2 py-0.5 text-sm font-semibold">{nome}</span> : null}
                     </h2>
@@ -91,5 +89,6 @@ export default function HistoricoAtividades() {
         </ol>
       )}
     </div>
+    </>
   )
 }

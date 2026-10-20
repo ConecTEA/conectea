@@ -2,12 +2,19 @@ import type { ReactNode } from 'react'
 import { IconAlert, IconCheck, IconInfo } from './Icons'
 import { Btn } from './Btn'
 
+export { Titulo } from './Banda'
+
+// Cartões de cantos grandes e assimétricos. Os tons fortes trazem o texto na cor certa.
 const tons = {
-  branco: 'bg-surface border-line',
-  lilac: 'bg-lilac border-lilac',
-  peach: 'bg-peach border-peach',
-  lemon: 'bg-lemon border-lemon',
-  aqua: 'bg-aqua border-aqua',
+  branco: 'bg-surface border-2 border-[#E9E3F8]',
+  lilac: 'bg-lilac',
+  peach: 'bg-peach',
+  lemon: 'bg-lemon',
+  aqua: 'bg-aqua',
+  violet: 'bg-violet text-white',
+  sun: 'bg-sun text-ink',
+  coral: 'bg-coral text-ink',
+  teal: 'bg-teal text-ink',
 }
 
 export function Card({
@@ -21,17 +28,18 @@ export function Card({
   as?: 'section' | 'div' | 'article' | 'li'
   tom?: keyof typeof tons
 }) {
-  return <Tag className={`rounded-card border-2 p-5 ${tons[tom]} ${className}`}>{children}</Tag>
+  return <Tag className={`rounded-[48px_48px_48px_14px] p-7 ${tons[tom]} ${className}`}>{children}</Tag>
 }
 
 type AlertVariante = 'info' | 'sucesso' | 'alerta'
 
-const alertaEstilo: Record<AlertVariante, { borda: string; icone: ReactNode }> = {
-  info: { borda: 'border-l-primary', icone: <IconInfo className="text-primary-dark" /> },
-  sucesso: { borda: 'border-l-success', icone: <IconCheck className="text-success" /> },
-  alerta: { borda: 'border-l-alert', icone: <IconAlert className="text-alert-dark" /> },
+const alertaEstilo: Record<AlertVariante, { fundo: string; icone: ReactNode }> = {
+  info: { fundo: 'bg-lilac', icone: <IconInfo className="text-violet" /> },
+  sucesso: { fundo: 'bg-aqua', icone: <IconCheck className="text-success" /> },
+  alerta: { fundo: 'bg-peach', icone: <IconAlert className="text-alert" /> },
 }
 
+// Aviso em pílula: ícone num círculo branco, sempre com texto (nunca só cor).
 export function Alert({
   variant = 'info',
   children,
@@ -45,10 +53,10 @@ export function Alert({
   return (
     <div
       role={variant === 'alerta' ? 'alert' : 'status'}
-      className={`flex flex-wrap items-start gap-3 rounded-card border border-border border-l-4 bg-surface p-4 ${e.borda}`}
+      className={`flex flex-wrap items-center gap-3 rounded-[32px] py-3 pl-3 pr-6 ${e.fundo}`}
     >
-      <span className="mt-0.5 shrink-0">{e.icone}</span>
-      <div className="min-w-0 flex-1">{children}</div>
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white">{e.icone}</span>
+      <div className="min-w-0 flex-1 leading-snug">{children}</div>
       {action}
     </div>
   )
@@ -56,12 +64,12 @@ export function Alert({
 
 export function Badge({ children, tom = 'neutro' }: { children: ReactNode; tom?: 'neutro' | 'sucesso' | 'atencao' }) {
   const tons = {
-    neutro: 'border-line bg-lilac text-ink',
-    sucesso: 'border-success bg-aqua text-ink',
-    atencao: 'border-sun bg-lemon text-ink',
+    neutro: 'bg-white text-ink',
+    sucesso: 'bg-white text-success',
+    atencao: 'bg-sun text-ink',
   }
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full border-2 px-3 py-0.5 text-sm font-semibold ${tons[tom]}`}>
+    <span className={`inline-flex items-center gap-1 rounded-full px-3.5 py-1 text-sm font-extrabold ${tons[tom]}`}>
       {tom === 'sucesso' ? <IconCheck width={14} height={14} className="text-success" /> : null}
       {children}
     </span>
@@ -80,16 +88,20 @@ export function EmptyState({
   to?: string
 }) {
   return (
-    <div className="rounded-card border-2 border-dashed border-violet/40 bg-lilac/50 p-8 text-center">
-      <svg viewBox="0 0 120 60" className="mx-auto mb-3 h-14 w-28" aria-hidden="true">
-        <circle cx="34" cy="30" r="22" className="fill-violet" />
-        <rect x="52" y="14" width="34" height="34" rx="8" className="fill-coral" />
-        <path d="M72 60a22 22 0 0 1 44 0z" className="fill-sun" />
+    <div className="mx-auto max-w-[720px] rounded-[64px_64px_64px_18px] bg-lilac p-10 text-center">
+      <svg viewBox="0 0 220 150" className="mx-auto mb-3 h-36 w-52" aria-hidden="true">
+        <path
+          d="M110 3C176 0 217.8 42 213.4 81C209 123 158.4 148.5 101.2 145.5C39.6 142.5 2.2 111 6.6 69C11 30 52.8 4.5 110 3Z"
+          className="fill-sun"
+        />
+        <circle cx="86" cy="62" r="26" className="fill-violet" />
+        <rect x="104" y="58" width="44" height="44" rx="12" className="fill-coral" />
+        <path d="M60 110a22 22 0 0 1 44 0z" className="fill-white" />
       </svg>
-      <p className="font-display text-lg font-bold">{titulo}</p>
-      {texto ? <p className="mt-1 text-muted">{texto}</p> : null}
+      <p className="font-display text-3xl font-bold">{titulo}</p>
+      {texto ? <p className="mt-2 text-ink-soft">{texto}</p> : null}
       {acao && to ? (
-        <div className="mt-4">
+        <div className="mt-6">
           <Btn to={to}>{acao}</Btn>
         </div>
       ) : null}
@@ -111,10 +123,10 @@ export function Stepper({ atual, passos }: { atual: number; passos: string[] }) 
         />
       </div>
       <ol className="relative hidden md:grid md:grid-cols-4">
-        <span className="absolute left-[12.5%] right-[12.5%] top-5 h-1 rounded-full bg-lilac" aria-hidden="true" />
+        <span className="absolute left-[12.5%] right-[12.5%] top-6 h-1 rounded-full bg-lilac" aria-hidden="true" />
         <span
           key={atual}
-          className="progresso absolute left-[12.5%] top-5 h-1 rounded-full bg-violet"
+          className="progresso absolute left-[12.5%] top-6 h-1 rounded-full bg-violet"
           style={{ width: `${(atual / (passos.length - 1)) * 75}%` }}
           aria-hidden="true"
         />
@@ -125,29 +137,20 @@ export function Stepper({ atual, passos }: { atual: number; passos: string[] }) 
             className="relative flex flex-col items-center gap-2 text-center text-sm"
           >
             <span
-              className={`flex h-10 w-10 items-center justify-center rounded-full border-2 font-bold ${
+              className={`flex h-12 w-12 items-center justify-center rounded-full border-2 font-extrabold ${
                 i < atual
                   ? 'border-violet bg-violet text-white'
                   : i === atual
-                    ? 'border-violet bg-surface text-violet'
-                    : 'border-line bg-surface text-ink-soft'
+                    ? 'border-ink bg-ink text-white'
+                    : 'border-[#D5CDF0] bg-surface text-ink-soft'
               }`}
             >
               {i < atual ? '✓' : i + 1}
             </span>
-            <span className={i === atual ? 'font-bold' : 'text-ink-soft'}>{p}</span>
+            <span className={i === atual ? 'font-extrabold' : 'text-ink-soft'}>{p}</span>
           </li>
         ))}
       </ol>
     </nav>
-  )
-}
-
-export function Titulo({ children, apoio }: { children: ReactNode; apoio?: string }) {
-  return (
-    <header className="mb-6">
-      <h1 className="text-3xl md:text-4xl">{children}</h1>
-      {apoio ? <p className="mt-2 text-muted">{apoio}</p> : null}
-    </header>
   )
 }

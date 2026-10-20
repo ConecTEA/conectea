@@ -1,18 +1,19 @@
 ﻿import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Link } from 'react-router'
 
-type Variante = 'primary' | 'accent' | 'secondary' | 'light' | 'ghost' | 'danger'
+type Variante = 'primary' | 'accent' | 'secondary' | 'light' | 'ghost' | 'danger' | 'ink'
 
 const base =
-  'inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border-2 px-5 py-2 text-base font-semibold transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none'
+  'inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border-2 px-7 py-2 text-base font-extrabold transition duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none'
 
 const variantes: Record<Variante, string> = {
   primary: 'brilho border-violet bg-violet text-white hover:border-violet-deep hover:bg-violet-deep',
-  accent: 'brilho border-coral bg-coral text-ink hover:bg-sun hover:border-sun',
+  accent: 'brilho border-sun bg-sun text-ink hover:border-coral hover:bg-coral',
+  ink: 'border-ink bg-ink text-white hover:bg-violet hover:border-violet',
   secondary: 'border-violet bg-surface text-violet hover:bg-lilac',
-  light: 'border-white bg-white text-violet-deep hover:bg-sun hover:border-sun hover:text-ink',
-  ghost: 'border-line bg-transparent text-ink hover:bg-lilac',
-  danger: 'border-alert bg-surface text-alert hover:bg-peach',
+  light: 'border-white bg-transparent text-white hover:bg-white hover:text-violet-deep',
+  ghost: 'border-ink bg-transparent text-ink hover:bg-lilac',
+  danger: 'border-alert bg-alert text-white hover:bg-ink hover:border-ink',
 }
 
 type Props = {
@@ -37,4 +38,3 @@ export function Btn({ variant = 'primary', block, to, children, className = '', 
     </button>
   )
 }
-

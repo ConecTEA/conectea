@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Btn } from '../components/Btn'
 import { Field } from '../components/Field'
-import { Alert, Card } from '../components/ui'
+import { Alert, Card, Titulo } from '../components/ui'
 import { emailValido, msg, vazio } from '../lib/validate'
 
 export default function RecuperarSenha() {
@@ -18,9 +18,10 @@ export default function RecuperarSenha() {
   }
 
   return (
+    <>
+    <Titulo apoio="Informe o e-mail da sua conta.">Recuperar senha</Titulo>
     <div className="mx-auto max-w-[480px]">
       <Card>
-        <h1 className="text-2xl">Recuperar senha</h1>
         {enviado ? (
           <div className="mt-5 space-y-4">
             <Alert variant="sucesso">Se o e-mail estiver cadastrado, você receberá as instruções.</Alert>
@@ -30,8 +31,7 @@ export default function RecuperarSenha() {
           </div>
         ) : (
           <>
-            <p className="mt-2 text-muted">Informe o e-mail da sua conta.</p>
-            <form onSubmit={enviar} noValidate className="mt-5 space-y-4">
+            <form onSubmit={enviar} noValidate className="space-y-4">
               <Field
                 label="E-mail"
                 id="email"
@@ -56,5 +56,6 @@ export default function RecuperarSenha() {
         )}
       </Card>
     </div>
+    </>
   )
 }

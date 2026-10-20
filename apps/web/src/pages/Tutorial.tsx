@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { IconCheck } from '../components/Icons'
 import { VideoTutorial } from '../components/VideoTutorial'
-import { Alert, Card, EmptyState } from '../components/ui'
+import { Btn } from '../components/Btn'
+import { Alert, Card, EmptyState, Titulo } from '../components/ui'
 import { buscarBox } from '../data/boxes'
 import { buscarTutorial, tutoriais } from '../data/tutoriais'
 
@@ -14,7 +15,7 @@ export default function Tutorial() {
   if (!tutorial) {
     return (
       <div>
-        <h1 className="mb-6 text-3xl">Tutorial não encontrado</h1>
+        <Titulo olho="nada por aqui">Tutorial não encontrado</Titulo>
         <EmptyState titulo="Tutorial não encontrado." acao="Ver tutoriais" to="/tutoriais" />
       </div>
     )
@@ -29,25 +30,30 @@ export default function Tutorial() {
 
   return (
     <div>
-      <p className="mb-2">
-        <Link to="/tutoriais" className="inline-flex min-h-12 items-center text-violet underline">
-          Voltar aos tutoriais
-        </Link>
-      </p>
+      <Titulo
+        cor="violet"
+        olho="← voltar aos tutoriais"
+        acao={
+          <Btn to="/tutoriais" variant="accent">
+            ← Voltar aos tutoriais
+          </Btn>
+        }
+      >
+        {tutorial.titulo}
+      </Titulo>
 
       <div className="grid gap-8 lg:grid-cols-5">
         <div className="lg:col-span-3">
           <VideoTutorial tutorial={tutorial} box={box} />
-          <p className="mt-6 text-sm font-semibold text-violet">
+          <p className="mt-6 font-extrabold text-violet">
             {box.nome} · {tutorial.brinquedo}
           </p>
-          <h1 className="mt-1 text-3xl md:text-4xl">{tutorial.titulo}</h1>
-          <p className="mt-3 text-lg">{tutorial.resumo}</p>
+          <p className="mt-3 text-xl text-ink-soft">{tutorial.resumo}</p>
 
-          <h2 className="mt-8 text-xl">Dicas</h2>
+          <h2 className="mt-8 text-3xl">Dicas</h2>
           <ul className="mt-3 space-y-2">
             {tutorial.dicas.map((d) => (
-              <li key={d} className="rounded-card bg-lemon px-4 py-3">
+              <li key={d} className="rounded-[28px] bg-lemon px-5 py-3">
                 {d}
               </li>
             ))}
@@ -68,8 +74,8 @@ export default function Tutorial() {
         <aside className="lg:col-span-2">
           <Card className="lg:sticky lg:top-24">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-xl">Passo a passo</h2>
-              <span className="font-display text-lg font-bold tabular-nums">{pct}%</span>
+              <h2 className="text-3xl">Passo a passo</h2>
+              <span className="font-display text-2xl font-bold tabular-nums text-violet">{pct}%</span>
             </div>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-lilac" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Progresso do tutorial">
               <div className="h-full rounded-full bg-violet transition-all duration-500" style={{ width: `${pct}%` }} />
@@ -80,8 +86,8 @@ export default function Tutorial() {
                 return (
                   <li key={p}>
                     <label
-                      className={`flex min-h-12 cursor-pointer items-start gap-3 rounded-card border-2 p-3 transition ${
-                        ok ? 'border-success bg-aqua' : 'border-line bg-surface hover:bg-lilac'
+                      className={`flex min-h-12 cursor-pointer items-start gap-3 rounded-[28px] border-2 p-3.5 transition ${
+                        ok ? 'border-aqua bg-aqua' : 'border-[#E9E3F8] bg-surface hover:bg-lilac'
                       }`}
                     >
                       <input type="checkbox" checked={ok} onChange={() => alternar(i)} className="sr-only" />
@@ -104,7 +110,7 @@ export default function Tutorial() {
                 <Alert variant="sucesso">Tudo certo! Que tal registrar a atividade no histórico?</Alert>
                 <Link
                   to="/atividades/registrar"
-                  className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-violet px-5 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-violet-deep"
+                  className="mt-3 inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-violet px-6 font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-violet-deep"
                 >
                   Registrar atividade
                 </Link>
@@ -115,17 +121,17 @@ export default function Tutorial() {
       </div>
 
       <section className="mt-12" aria-labelledby="mais">
-        <h2 id="mais" className="mb-4 text-2xl">
-          Veja também
+        <h2 id="mais" className="mb-5 text-4xl">
+          Veja <em className="text-violet">também</em>
         </h2>
-        <ul className="grid gap-4 sm:grid-cols-3">
-          {outros.map((t) => (
+        <ul className="grid gap-5 sm:grid-cols-3">
+          {outros.map((t, i) => (
             <li key={t.id}>
               <Link
                 to={`/tutoriais/${t.id}`}
-                className="block h-full rounded-card border-2 border-line bg-surface p-4 transition hover:-translate-y-1 hover:shadow-lg"
+                className={`block h-full rounded-[40px_40px_40px_12px] p-6 transition hover:-translate-y-1 hover:shadow-lg ${['bg-lemon', 'bg-lilac', 'bg-aqua'][i % 3]}`}
               >
-                <p className="text-sm font-semibold text-violet">{t.brinquedo}</p>
+                <p className="text-sm font-extrabold">{t.brinquedo}</p>
                 <p className="mt-1 font-display text-lg font-bold">{t.titulo}</p>
                 <p className="mt-1 text-sm text-ink-soft">{t.duracao}</p>
               </Link>

@@ -16,7 +16,7 @@ type Props = {
 }
 
 const campo =
-  'block min-h-12 w-full rounded-xl border-2 bg-surface px-4 py-2 text-base text-ink placeholder:text-ink-soft focus:border-violet'
+  'block min-h-14 w-full rounded-[20px] border-2 bg-surface px-[22px] py-3 text-base text-ink placeholder:text-ink-soft focus:border-violet'
 
 export function Field({
   label,
@@ -39,13 +39,13 @@ export function Field({
     required,
     'aria-invalid': error ? true : undefined,
     'aria-describedby': describedBy,
-    className: `${campo} ${error ? 'border-alert' : 'border-line'}`,
+    className: `${campo} ${error ? 'border-alert' : 'border-[#D5CDF0]'}`,
     ...rest,
   }
 
   return (
     <div>
-      <label htmlFor={id} className="mb-1 block font-medium">
+      <label htmlFor={id} className="mb-1.5 block text-[15px] font-extrabold">
         {label}
         {required ? <span className="text-muted"> (obrigatório)</span> : <span className="text-muted"> (opcional)</span>}
       </label>
@@ -105,7 +105,7 @@ export function SenhaField(props: SenhaProps) {
           type="button"
           onClick={() => setVer((v) => !v)}
           aria-pressed={ver}
-          className="mt-1 min-h-12 rounded-card px-2 text-sm font-medium text-primary-dark underline"
+          className="mt-1 min-h-12 rounded-full px-2 text-sm font-extrabold text-violet underline"
         >
           {ver ? 'Ocultar senha' : 'Mostrar senha'}
         </button>

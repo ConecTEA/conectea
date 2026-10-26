@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Popup remover criança</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Figtree:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap">
+<style>
+body{margin:0;background:#FBFAF7;color:#14142B;font-family:Figtree,system-ui,sans-serif;font-size:17px;line-height:1.55}
+h1,h2,h3,p{margin:0}
+a{color:#4B2FE0}
+@keyframes dc-entra{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+body{animation:dc-entra .35s ease-out both}
+a,button{transition:background-color .2s ease,box-shadow .2s ease,transform .2s ease,filter .2s ease}
+a:hover{filter:brightness(.96)}
+@media (prefers-reduced-motion:reduce){body{animation:none}a,button{transition:none}}
+</style>
+</helmet>
+<div style="width:100%;min-height:380px;background:#FBFAF7;display:flex;flex-direction:column;">
+<div style="flex:1;background:rgba(20,20,43,0.55);display:flex;align-items:center;justify-content:center;padding:24px"><div style="width:560px;background:#fff;border-radius:56px 56px 56px 16px;padding:34px;box-sizing:border-box"><div style="display:flex;gap:16px;align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:60px;height:60px;border-radius:999px;background:#4B2FE0;color:#fff;font-family:Fraunces,serif;font-weight:700;font-size:28px">L</span><div><p style="margin:0;font-family:Fraunces,Georgia,serif;font-weight:700;letter-spacing:-0.02em;line-height:1.08;font-size:28px">Lucas</p><p style="margin:0;color:#57586F">6 anos · TEA nível 1</p></div></div><div style="display:flex;gap:14px;align-items:center;background:#FFE3DC;border-radius:999px;padding:12px 28px 12px 12px;margin-top:20px"><span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:999px;background:#fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C7382E" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></span><p style="margin:0;font-size:16px;line-height:1.45">Remover <b>Lucas</b>? As atividades registradas dessa criança também serão removidas.</p></div><div style="margin-top:22px;display:flex;gap:12px"><a href="Criancas.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 28px;border-radius:999px;font-weight:800;font-size:16px;text-decoration:none;box-sizing:border-box;background:#C7382E;color:#fff;border:2px solid #C7382E;">Remover</a><a href="Criancas.dc.html" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 28px;border-radius:999px;font-weight:800;font-size:16px;text-decoration:none;box-sizing:border-box;background:transparent;color:#14142B;border:2px solid #14142B;">Cancelar</a></div></div></div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":380}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

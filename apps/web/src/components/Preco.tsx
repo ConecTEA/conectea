@@ -8,10 +8,10 @@ export function Preco({ box, grande = false }: { box: Box; grande?: boolean }) {
   const final = precoFinal(box)
   return (
     <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-      <span className={`font-display font-bold tabular-nums ${grande ? 'text-4xl' : 'text-2xl'}`}>{brl(final)}</span>
+      <span className={`font-display font-bold tabular-nums ${grande ? 'text-5xl' : 'text-2xl'}`}>{brl(final)}</span>
       {promo ? (
         <>
-          <span className="text-sm text-ink-soft line-through tabular-nums">
+          <span className="text-sm line-through opacity-80 tabular-nums">
             <span className="sr-only">Preço antes: </span>
             {brl(box.preco)}
           </span>

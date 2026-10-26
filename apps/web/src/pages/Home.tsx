@@ -1,5 +1,7 @@
 ﻿import { Btn } from '../components/Btn'
 import { CapaBox } from '../components/CapaBox'
+import { Faixa, Onda, useDefinirBanda } from '../components/Banda'
+import { IconCheck } from '../components/Icons'
 import { Preco } from '../components/Preco'
 import { Reveal } from '../components/Reveal'
 import { TiltCard } from '../components/TiltCard'
@@ -13,131 +15,172 @@ const mover = (k: number) => ({
 })
 
 const passos = [
-  { t: 'Explore', d: 'Veja boxes, promoções e tutoriais sem criar conta.', cor: 'bg-lilac' },
-  { t: 'Escolha', d: 'Compare as boxes por nível e veja o que cada brinquedo estimula.', cor: 'bg-lemon' },
-  { t: 'Compre ou assine', d: 'Entre ou crie sua conta só na hora de comprar.', cor: 'bg-aqua' },
-  { t: 'Acompanhe', d: 'Cadastre a criança e anote as atividades feitas.', cor: 'bg-peach' },
+  { t: 'Explore', d: 'Veja boxes, promoções e tutoriais sem criar conta.', cor: 'bg-violet text-white' },
+  { t: 'Escolha', d: 'Compare por nível e veja o que cada brinquedo estimula.', cor: 'bg-coral text-ink' },
+  { t: 'Compre ou assine', d: 'Entre ou crie a conta só na hora de comprar.', cor: 'bg-teal text-ink' },
+  { t: 'Acompanhe', d: 'Cadastre a criança e anote o que foi feito.', cor: 'bg-ink text-white' },
 ]
 
-// Peças do herói: encaixam ao carregar e depois flutuam devagar.
-function PecasHeroi() {
+// Caixa de brinquedos aberta: as peças saem de dentro e flutuam devagar.
+function ArteHeroi() {
   return (
-    <svg viewBox="0 0 360 320" className="w-full max-w-[420px] overflow-visible" aria-hidden="true">
-      <g style={mover(-26)}>
+    <svg viewBox="0 0 540 500" className="w-full max-w-[540px] overflow-visible" aria-hidden="true">
+      <path
+        d="M270 10C432 0 534.6 140 523.8 270C513 410 388.8 495 248.4 485C97.2 475 5.4 370 16.2 230C27 100 129.6 15 270 10Z"
+        className="fill-sun"
+      />
+      <path d="M100 300h360l-26 164a18 18 0 0 1-18 14H144a18 18 0 0 1-18-14z" className="fill-teal" />
+      <path d="M100 300h360l-6 40H106z" fill="#0E8F83" />
+      <rect x="236" y="346" width="88" height="28" rx="14" className="fill-white" />
+      <path d="M100 300l-34-54 84 14zM460 300l34-54-84 14z" className="fill-teal" />
+      <g style={mover(-20)}>
         <g className="animate-flutuar">
-          <circle cx="120" cy="120" r="84" className="fill-sun" />
+          <g transform="translate(140 140) rotate(-8) scale(1.55)">
+            <rect x="6" y="56" width="42" height="40" rx="12" className="fill-teal" />
+            <rect x="52" y="56" width="42" height="40" rx="12" className="fill-coral" />
+            <rect x="28" y="14" width="44" height="42" rx="12" className="fill-violet" />
+            <path d="M42 34h16M50 28v12" stroke="#fff" strokeWidth="5" strokeLinecap="round" opacity=".6" />
+          </g>
         </g>
       </g>
-      <g style={mover(34)}>
+      <g style={mover(30)}>
         <g className="animate-flutuar [animation-delay:-3s]">
-          <rect x="170" y="110" width="140" height="140" rx="26" className="fill-coral" />
+          <g transform="translate(262 82) rotate(6) scale(1.4)">
+            <circle cx="50" cy="52" r="40" className="fill-violet" />
+            <circle cx="36" cy="38" r="5" fill="#fff" opacity=".55" />
+            <circle cx="62" cy="34" r="4" fill="#fff" opacity=".55" />
+            <circle cx="68" cy="58" r="5" fill="#fff" opacity=".55" />
+          </g>
         </g>
       </g>
-      <g style={mover(-14)}>
+      <g style={mover(-34)}>
         <g className="animate-flutuar [animation-delay:-5s]">
-          <path d="M40 290a80 80 0 0 1 160 0z" className="fill-teal" />
+          <g transform="translate(372 140) rotate(10) scale(1.45)">
+            <path d="M50 6l12 27 29 3-22 20 7 29-26-15-26 15 7-29L9 36l29-3z" className="fill-sun" stroke="#E8B92A" strokeWidth="2" strokeLinejoin="round" />
+            <circle cx="42" cy="48" r="3" fill="#14142B" />
+            <circle cx="58" cy="48" r="3" fill="#14142B" />
+            <path d="M44 58q6 5 12 0" stroke="#14142B" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+          </g>
         </g>
-      </g>
-      <g style={mover(48)}>
-        <circle cx="262" cy="64" r="22" className="fill-white" />
-      </g>
-      <g style={mover(-38)}>
-        <circle cx="120" cy="120" r="26" className="fill-violet-deep" />
       </g>
     </svg>
   )
 }
 
 export default function Home() {
+  useDefinirBanda('violet')
   const parallax = useParallax<HTMLElement>()
   return (
-    <div className="space-y-20">
-      {/* Herói: degradê que desliza devagar e peças que seguem o mouse */}
-      <section
-        ref={parallax.ref}
-        onPointerMove={parallax.onPointerMove}
-        onPointerLeave={parallax.onPointerLeave}
-        className="relative animate-gradiente overflow-hidden rounded-[28px] bg-gradient-to-br from-violet via-violet-deep to-violet bg-[length:220%_220%] px-6 py-12 text-white md:px-14 md:py-20"
-      >
-        <div className="absolute -right-24 -top-24 h-72 w-72 animate-girar rounded-full border-[28px] border-white/10" aria-hidden="true" />
-        <div className="relative grid items-center gap-10 md:grid-cols-5">
-          <div className="md:col-span-3">
-            <p className="font-semibold uppercase tracking-widest text-sun">Onde cada experiência transforma e conecta</p>
-            <h1 className="mt-3 text-4xl md:text-6xl" aria-label="Boxes sensoriais para conectar famílias.">
-              {'Boxes sensoriais para conectar famílias.'.split(' ').map((p, i) => (
-                <span key={i} aria-hidden="true" className="palavra mr-[0.25em]" style={{ animationDelay: `${i * 90}ms` }}>
-                  {p}
-                </span>
-              ))}
-            </h1>
-            <p className="mt-5 max-w-xl text-lg text-white/90">
-              Assine boxes de brinquedos sensoriais para crianças com TEA e registre as atividades feitas em casa, tudo
-              em um só lugar.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Btn to="/loja" variant="accent">
-                Ver as boxes
-              </Btn>
-              <Btn to="/promocoes" variant="light">
-                Ver promoções
-              </Btn>
+    <div className="-mt-8">
+      {/* Herói: faixa violeta, círculos que saem da borda e caixa de peças */}
+      <div className="relative left-1/2 w-screen -translate-x-1/2">
+        <section
+          ref={parallax.ref}
+          onPointerMove={parallax.onPointerMove}
+          onPointerLeave={parallax.onPointerLeave}
+          className="relative overflow-hidden bg-violet text-white"
+        >
+          <span className="pointer-events-none absolute -right-32 -top-44 h-[520px] w-[520px] rounded-full bg-[#5A3FF0]" aria-hidden="true" />
+          <span className="pointer-events-none absolute -bottom-28 -left-24 h-[300px] w-[300px] rounded-full bg-[#2E1BA8]" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-[1200px] items-center gap-10 px-4 pb-14 pt-[120px] md:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <p className="font-hand text-3xl text-sun">feito para brincar junto</p>
+              <h1 className="mt-2 text-5xl md:text-[80px] md:leading-[1.02]">
+                Brinquedos que ajudam a criança a <em className="text-sun">se conectar</em> com o mundo.
+              </h1>
+              <p className="mt-6 max-w-[520px] text-xl text-white/95">
+                Boxes sensoriais escolhidas por nível de suporte, com passo a passo de uso e um caderno para registrar o
+                que funcionou em casa.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Btn to="/loja" variant="accent">
+                  Ver as boxes
+                </Btn>
+                <Btn to="/tutoriais" variant="light">
+                  Como funciona
+                </Btn>
+              </div>
+              <ul className="mt-8 flex flex-wrap gap-x-7 gap-y-2 font-bold">
+                {['Olhe tudo sem criar conta', 'Conta só na hora de comprar'].map((t) => (
+                  <li key={t} className="flex items-center gap-2">
+                    <IconCheck width={18} height={18} className="text-sun" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex justify-center">
+              <ArteHeroi />
             </div>
           </div>
-          <div className="flex justify-center md:col-span-2">
-            <PecasHeroi />
+          <div className="bg-violet">
+            <Onda de="sun" />
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* Como funciona */}
-      <section aria-labelledby="como">
-        <Reveal>
-          <h2 id="como" className="text-3xl md:text-4xl">
-            Como funciona
-          </h2>
-        </Reveal>
-        <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {passos.map((p, i) => (
-            <li key={p.t}>
-              <Reveal atraso={i * 60} className="h-full">
-                <div className={`h-full rounded-card p-6 ${p.cor}`}>
-                  <span className="font-display text-5xl font-bold text-violet">{String(i + 1).padStart(2, '0')}</span>
-                  <h3 className="mt-2 text-xl">{p.t}</h3>
-                  <p className="mt-1 text-ink-soft">{p.d}</p>
-                </div>
-              </Reveal>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <Faixa cor="sun" className="pb-14 pt-6" ondaPara="bg">
+        <section aria-labelledby="como">
+          <Reveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <p className="font-hand text-3xl text-coral">do primeiro olhar ao caderno</p>
+                <h2 id="como" className="text-4xl md:text-[56px]">
+                  Como a ConecTEA <em className="text-violet">funciona</em>
+                </h2>
+              </div>
+              <p className="max-w-[360px] text-lg">Cada passo acontece no seu ritmo. Nada é pedido antes da hora de comprar.</p>
+            </div>
+          </Reveal>
+          <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {passos.map((p, i) => (
+              <li key={p.t}>
+                <Reveal atraso={i * 60} className="h-full">
+                  <span className={`flex h-[84px] w-[84px] items-center justify-center rounded-full font-display text-4xl font-bold ${p.cor}`}>
+                    {i + 1}
+                  </span>
+                  <h3 className="mb-2 mt-5 text-[28px]">{p.t}</h3>
+                  <p className="max-w-[250px]">{p.d}</p>
+                </Reveal>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </Faixa>
 
       {/* Boxes */}
-      <section aria-labelledby="boxes">
+      <section aria-labelledby="boxes" className="py-10">
         <Reveal>
-          <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h2 id="boxes" className="text-3xl md:text-4xl">
-                Nossas boxes
+              <p className="font-hand text-3xl text-coral">uma box para cada fase</p>
+              <h2 id="boxes" className="text-4xl md:text-[56px]">
+                Nossas boxes, por <em className="text-violet">nível</em>
               </h2>
-              <p className="mt-2 text-ink-soft">Boxes para cada nível de suporte, com preços de exemplo.</p>
             </div>
-            <Btn to="/loja" variant="secondary">
-              Ver catálogo
+            <Btn to="/loja" variant="ink">
+              Ver as {boxes.length} boxes
             </Btn>
           </div>
         </Reveal>
-        <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {boxes.slice(0, 4).map((b, i) => (
-            <li key={b.id}>
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {boxes.slice(0, 3).map((b, i) => (
+            <li key={b.id} className={i === 1 ? 'lg:mt-10' : ''}>
               <Reveal atraso={i * 60} className="h-full">
                 <TiltCard className="h-full">
-                  <article className="group h-full rounded-card border-2 border-line bg-surface p-4 transition-shadow duration-300 hover:shadow-lg">
-                    <div className="overflow-hidden rounded-card">
-                      <CapaBox box={b} className="h-32 group-hover:scale-105" />
+                  <article className="group h-full">
+                    <div className="overflow-hidden rounded-[56px_56px_56px_16px]">
+                      <CapaBox box={b} className="h-56 group-hover:scale-105" />
                     </div>
-                    <h3 className="mt-4 text-xl">{b.nome}</h3>
+                    <h3 className="mt-5 text-[34px]">{b.nome}</h3>
                     <p className="mt-1 text-ink-soft">{b.descricao}</p>
-                    <div className="mt-3"><Preco box={b} /></div>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <Preco box={b} />
+                      <Btn to={`/loja/box/${b.id}`} variant="ink" className="min-h-11 px-5 text-sm">
+                        Ver detalhes
+                      </Btn>
+                    </div>
                   </article>
                 </TiltCard>
               </Reveal>
@@ -147,39 +190,58 @@ export default function Home() {
       </section>
 
       {/* Atividades */}
-      <section aria-labelledby="ativ">
-        <Reveal>
-          <div className="grid items-center gap-6 rounded-[28px] bg-ink p-8 text-white md:grid-cols-2 md:p-14">
-            <div>
-              <h2 id="ativ" className="text-3xl md:text-4xl">
-                Acompanhe cada atividade.
-              </h2>
-              <p className="mt-4 max-w-md text-white/85">
-                Depois de cada brincadeira, anote o que foi feito. Você guarda tudo em um só lugar e consulta quando quiser.
-              </p>
+      <Faixa cor="teal" ondaDe="bg" ondaPara="bg" className="py-12">
+        <section aria-labelledby="ativ">
+          <Reveal>
+            <div className="grid items-center gap-10 md:grid-cols-2">
+              <div className="rounded-[56px_56px_56px_16px] bg-white p-10 text-center">
+                <p className="font-display text-3xl font-bold text-violet">Caderno de atividades</p>
+                <p className="mt-2 text-ink-soft">Data, o que foi feito e o que funcionou.</p>
+              </div>
+              <div>
+                <p className="font-hand text-3xl text-sun">sem pressão</p>
+                <h2 id="ativ" className="text-4xl text-white md:text-[54px]">
+                  Anote o que <em className="text-sun">funcionou</em>, no seu ritmo
+                </h2>
+                <p className="mt-4 text-xl text-white">
+                  Depois de cada brincadeira, registre em poucas palavras. Com o tempo, você enxerga o que a criança mais
+                  gosta e escolhe a próxima box com mais segurança.
+                </p>
+                <ul className="mt-6 space-y-2 font-bold text-white">
+                  {['Vários filhos na mesma conta', 'Dicas de uso para cada box', 'Vídeos curtos, passo a passo'].map((t) => (
+                    <li key={t} className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
+                        <IconCheck width={16} height={16} className="text-teal" />
+                      </span>
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div className="flex flex-wrap gap-3 md:justify-end">
-              <span className="rounded-full bg-sun px-5 py-3 font-display text-lg font-bold text-ink">4 boxes</span>
-              <span className="rounded-full bg-teal px-5 py-3 font-display text-lg font-bold text-ink">Histórico</span>
-              <span className="rounded-full bg-coral px-5 py-3 font-display text-lg font-bold text-ink">Suporte</span>
-            </div>
-          </div>
-        </Reveal>
-      </section>
+          </Reveal>
+        </section>
+      </Faixa>
 
       {/* Chamada final */}
-      <Reveal>
-        <section className="rounded-[28px] bg-sun px-6 py-12 text-center text-ink md:py-16" aria-labelledby="cta">
-          <h2 id="cta" className="text-3xl md:text-5xl">
-            Pronto para começar?
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg">Crie sua conta em menos de um minuto. Esta é uma versão de demonstração.</p>
-          <div className="mt-6 flex justify-center">
-            <Btn to="/cadastro">Criar conta</Btn>
-          </div>
-        </section>
-      </Reveal>
+      <div className="pb-6 pt-4">
+        <Reveal>
+          <section
+            className="flex flex-wrap items-center justify-between gap-8 rounded-[64px_64px_64px_18px] bg-ink p-10 md:p-14"
+            aria-labelledby="cta"
+          >
+            <div className="max-w-[640px]">
+              <h2 id="cta" className="text-4xl text-white md:text-[52px]">
+                Comece olhando as boxes. A conta só é pedida <em className="text-sun">na hora de comprar.</em>
+              </h2>
+              <p className="mt-4 text-lg text-white/90">Esta é uma versão de demonstração. Nenhum pagamento real é feito.</p>
+            </div>
+            <Btn to="/loja" variant="accent">
+              Ver as boxes
+            </Btn>
+          </section>
+        </Reveal>
+      </div>
     </div>
   )
 }
-

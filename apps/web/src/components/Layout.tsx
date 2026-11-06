@@ -37,8 +37,10 @@ const irParaConteudo = (e: React.MouseEvent) => {
 
 // Só deixa passar quem entrou. Quem tenta comprar sem conta vai para o login e volta depois.
 export function RotaPrivada() {
-  const { usuario } = useStore()
+  const { usuario, carregandoSessao } = useStore()
   const loc = useLocation()
+  // Ao recarregar a página, espera o Supabase devolver a sessão antes de decidir mandar para o login.
+  if (carregandoSessao) return <p className="p-8 text-center">Carregando...</p>
   if (!usuario) {
     const motivo = loc.pathname.startsWith('/checkout') ? 'compra' : 'acesso'
     return <Navigate to="/login" replace state={{ de: loc.pathname, motivo }} />

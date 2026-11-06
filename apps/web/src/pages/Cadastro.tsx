@@ -2,8 +2,9 @@
 import { Link, useLocation, useNavigate } from 'react-router'
 import { Btn } from '../components/Btn'
 import { Field, SenhaField } from '../components/Field'
-import { Card, Titulo } from '../components/ui'
+import { Alert, Card, Titulo } from '../components/ui'
 import { IconCheck } from '../components/Icons'
+import { criarConta } from '../lib/auth'
 import { emailValido, msg, temErro, vazio, type Erros } from '../lib/validate'
 
 export default function Cadastro() {
@@ -16,24 +17,41 @@ export default function Cadastro() {
   const [conf, setConf] = useState('')
   const [aceite, setAceite] = useState(false)
   const [erros, setErros] = useState<Erros>({})
+  const [geral, setGeral] = useState('')
+  const [enviando, setEnviando] = useState(false)
 
   const senhaOk = senha.length >= 8
 
-  function enviar(e: FormEvent) {
+  async function enviar(e: FormEvent) {
     e.preventDefault()
     const n: Erros = {}
     if (vazio(nome)) n.nome = msg.obrigatorio
     if (vazio(email)) n.email = msg.obrigatorio
     else if (!emailValido(email)) n.email = msg.email
-    else if (email.trim().toLowerCase() === 'marina@exemplo.com') n.email = 'Este e-mail já está cadastrado. Tente entrar.'
     if (vazio(senha)) n.senha = msg.obrigatorio
     else if (!senhaOk) n.senha = msg.senhaCurta
     if (vazio(conf)) n.conf = msg.obrigatorio
     else if (conf !== senha) n.conf = msg.senhasDiferentes
     if (!aceite) n.aceite = 'É necessário aceitar para continuar.'
     setErros(n)
+    setGeral('')
     if (temErro(n)) return
-    nav('/login', { state: { ...estado, aviso: 'Sua conta foi criada. Agora entre.' } })
+
+    setEnviando(true)
+    const r = await criarConta(nome, email, senha)
+    setEnviando(false)
+    if (r.erro) {
+      // Erros de e-mail ficam no campo; os demais (rede, limite de envio) no aviso geral.
+      if (r.erro.startsWith('Este e-mail')) setErros({ email: r.erro })
+      else setGeral(r.erro)
+      return
+    }
+    if (r.precisaConfirmar) {
+      nav('/login', { state: { ...estado, aviso: 'Conta criada! Enviamos um link de confirmação para o seu e-mail. Confirme e depois entre.' } })
+      return
+    }
+    // Sem confirmação por e-mail, o Supabase já deixa a pessoa logada.
+    nav(estado?.de ?? '/inicio', { replace: true })
   }
 
   const on = (set: (v: string) => void) => (e: ChangeEvent<HTMLInputElement>) => set(e.target.value)
@@ -109,8 +127,10 @@ export default function Cadastro() {
             ) : null}
           </div>
 
-          <Btn type="submit" block>
-            Criar conta
+          {geral ? <Alert variant="alerta">{geral}</Alert> : null}
+
+          <Btn type="submit" block disabled={enviando}>
+            {enviando ? 'Criando...' : 'Criar conta'}
           </Btn>
         </form>
         <p className="mt-4 text-center">

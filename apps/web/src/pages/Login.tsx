@@ -3,11 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router'
 import { Btn } from '../components/Btn'
 import { Field, SenhaField } from '../components/Field'
 import { Alert, Card, Titulo } from '../components/ui'
+import { entrarComSenha } from '../lib/auth'
 import { emailValido, msg, temErro, vazio, type Erros } from '../lib/validate'
-import { useStore } from '../store'
 
 export default function Login() {
-  const { entrar } = useStore()
   const nav = useNavigate()
   const loc = useLocation()
   const estado = loc.state as { aviso?: string; de?: string; motivo?: string } | null
@@ -21,7 +20,7 @@ export default function Login() {
   const [geral, setGeral] = useState('')
   const [enviando, setEnviando] = useState(false)
 
-  function enviar(e: FormEvent) {
+  async function enviar(e: FormEvent) {
     e.preventDefault()
     const novos: Erros = {}
     if (vazio(email)) novos.email = msg.obrigatorio
@@ -32,16 +31,13 @@ export default function Login() {
     if (temErro(novos)) return
 
     setEnviando(true)
-    setTimeout(() => {
-      // Simulação: a senha "errada" mostra o erro geral. Qualquer outra entra.
-      if (senha === 'errada') {
-        setGeral('E-mail ou senha incorretos.')
-        setEnviando(false)
-        return
-      }
-      entrar(email)
-      nav(destino, { replace: true })
-    }, 400)
+    const erro = await entrarComSenha(email, senha)
+    setEnviando(false)
+    if (erro) {
+      setGeral(erro)
+      return
+    }
+    nav(destino, { replace: true })
   }
 
   return (

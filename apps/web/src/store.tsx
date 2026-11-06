@@ -9,10 +9,13 @@ import {
 } from './data/exemplos'
 import { combo, precoFinal } from './data/promocoes'
 import { hojeISO } from './lib/format'
+import { sairDaConta } from './lib/auth'
+import { supabase } from './lib/supabase'
 
 /*
-  Estado do protótipo, em memória (com cópia em sessionStorage só para o hot reload
-  não deslogar você enquanto edita). Não há back-end nem persistência real.
+  Estado do protótipo, em memória (com cópia em sessionStorage só para o hot reload).
+  Etapa 1: quem está logado vem do Supabase Auth. Crianças, pedidos, assinatura e atividades
+  ainda são em memória e entram no banco nas próximas etapas.
 */
 
 export type Responsavel = { nome: string; email: string }
@@ -77,10 +80,37 @@ const inicial: Dados = {
 
 const CHAVE = 'conectea-prototipo-v2'
 
+// Conta de demonstração: vê o sistema com dados fictícios. Qualquer outra conta começa vazia.
+const EMAIL_DEMO = 'teste@gmail.com'
+
+const dadosDemo = {
+  criancas: inicial.criancas,
+  criancaAtivaId: inicial.criancaAtivaId,
+  endereco: null,
+  pedidos: inicial.pedidos,
+  assinatura: inicial.assinatura,
+  atividades: inicial.atividades,
+}
+
+const semDados = {
+  criancas: [],
+  criancaAtivaId: null,
+  endereco: null,
+  pedidos: [],
+  assinatura: null,
+  atividades: [],
+}
+
+const nomeDoEmail = (email: string) => {
+  const local = email.split('@')[0]
+  return local.charAt(0).toUpperCase() + local.slice(1)
+}
+
 function carregar(): Dados {
   try {
     const bruto = sessionStorage.getItem(CHAVE)
-    if (bruto) return { ...inicial, ...JSON.parse(bruto) }
+    // Quem está logado é decidido pela sessão do Supabase, nunca pela cópia local.
+    if (bruto) return { ...inicial, ...JSON.parse(bruto), usuario: null }
   } catch {
     // sessionStorage indisponível: segue com os dados iniciais
   }
@@ -97,7 +127,7 @@ type Linha = { nome: string; qtd: number; preco: number }
 
 type Store = Dados & {
   criancaAtiva: Crianca | null
-  entrar: (email: string) => void
+  carregandoSessao: boolean
   sair: () => void
   atualizarUsuario: (u: Partial<Responsavel>) => void
   salvarCrianca: (c: NovaCrianca) => string
@@ -122,6 +152,28 @@ const Ctx = createContext<Store | null>(null)
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [d, setD] = useState<Dados>(carregar)
+  const [carregandoSessao, setCarregandoSessao] = useState(Boolean(supabase))
+
+  useEffect(() => {
+    if (!supabase) return
+    const { data } = supabase.auth.onAuthStateChange((_evento, sessao) => {
+      const u = sessao?.user
+      if (!u) {
+        // Visitante: nada a limpar. Só limpa se havia alguém logado (saída da conta).
+        setD((x) => (x.usuario ? { ...x, usuario: null, carrinho: [], planoCheckout: null } : x))
+      } else {
+        const email = u.email ?? ''
+        const nome = String(u.user_metadata?.nome ?? '').trim() || nomeDoEmail(email)
+        setD((x) =>
+          x.usuario?.email === email
+            ? { ...x, usuario: { nome, email } }
+            : { ...x, ...(email.toLowerCase() === EMAIL_DEMO ? dadosDemo : semDados), usuario: { nome, email } },
+        )
+      }
+      setCarregandoSessao(false)
+    })
+    return () => data.subscription.unsubscribe()
+  }, [])
 
   useEffect(() => {
     try {
@@ -158,15 +210,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const store: Store = {
     ...d,
     criancaAtiva,
-    entrar: (email) => {
-      const local = email.split('@')[0]
-      const nome =
-        email.trim().toLowerCase() === 'marina@exemplo.com'
-          ? 'Marina Souza'
-          : local.charAt(0).toUpperCase() + local.slice(1)
-      setD((x) => ({ ...x, usuario: { nome, email } }))
+    carregandoSessao,
+    sair: () => {
+      setD((x) => ({ ...x, usuario: null, carrinho: [], planoCheckout: null }))
+      void sairDaConta()
     },
-    sair: () => setD((x) => ({ ...x, usuario: null, carrinho: [], planoCheckout: null })),
     atualizarUsuario: (u) => setD((x) => (x.usuario ? { ...x, usuario: { ...x.usuario, ...u } } : x)),
     salvarCrianca: (c) => {
       const id = c.id ?? `c${Date.now()}`

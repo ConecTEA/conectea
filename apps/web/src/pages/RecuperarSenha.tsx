@@ -2,18 +2,25 @@ import { useState, type FormEvent } from 'react'
 import { Btn } from '../components/Btn'
 import { Field } from '../components/Field'
 import { Alert, Card, Titulo } from '../components/ui'
+import { pedirRecuperacao } from '../lib/auth'
 import { emailValido, msg, vazio } from '../lib/validate'
 
 export default function RecuperarSenha() {
   const [email, setEmail] = useState('')
   const [erro, setErro] = useState('')
   const [enviado, setEnviado] = useState(false)
+  const [enviando, setEnviando] = useState(false)
 
-  function enviar(e: FormEvent) {
+  async function enviar(e: FormEvent) {
     e.preventDefault()
     if (vazio(email)) return setErro(msg.obrigatorio)
     if (!emailValido(email)) return setErro(msg.email)
     setErro('')
+    setEnviando(true)
+    const falha = await pedirRecuperacao(email)
+    setEnviando(false)
+    if (falha) return setErro(falha)
+    // Mesma resposta exista o e-mail ou não, para não revelar quem tem conta.
     setEnviado(true)
   }
 
@@ -43,8 +50,8 @@ export default function RecuperarSenha() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 error={erro}
               />
-              <Btn type="submit" block>
-                Enviar link de recuperação
+              <Btn type="submit" block disabled={enviando}>
+                {enviando ? 'Enviando...' : 'Enviar link de recuperação'}
               </Btn>
             </form>
             <p className="mt-4 text-center">

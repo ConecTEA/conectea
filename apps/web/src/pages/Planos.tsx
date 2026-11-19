@@ -25,16 +25,16 @@ export default function Planos() {
             as="li"
             key={p.id}
             tom={(['sun', 'violet', 'coral'] as const)[i % 3]}
-            className={`relative flex flex-col !rounded-[64px_64px_64px_18px] !p-9 transition duration-300 hover:-translate-y-1 hover:shadow-lg ${i === 1 ? 'md:-mt-3' : ''}`}
+            className={`relative flex flex-col min-w-0 !rounded-[64px_64px_64px_18px] !p-6 lg:!p-9 transition duration-300 hover:-translate-y-1 hover:shadow-lg ${i === 1 ? 'md:-mt-3' : ''}`}
           >
             {i === 1 ? (
-              <span className="absolute -top-4 left-9 rounded-full bg-sun px-4 py-1.5 text-sm font-extrabold text-ink">
+              <span className="absolute -top-4 left-6 rounded-full sm:left-9 bg-sun px-4 py-1.5 text-sm font-extrabold text-ink">
                 Mais econômico por box
               </span>
             ) : null}
             <h2 className="text-4xl">{p.nome}</h2>
             <p className="mt-3">
-              <span className="font-display text-5xl font-bold tabular-nums">{brl(p.preco)}</span>
+              <span className="font-display text-4xl font-bold tabular-nums lg:text-5xl">{brl(p.preco)}</span>
               <span className="mt-1 block">{p.periodicidade}</span>
             </p>
             <ul className="mt-6 flex-1 space-y-2">

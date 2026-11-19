@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 
 // Marca: peças que se encaixam (círculo, quadrado e meia-lua). Na versão clara, sobre faixas escuras.
-export function LogoMarca({ className = 'h-10 w-10', claro = false }: { className?: string; claro?: boolean }) {
+export function LogoMarca({ className = 'h-9 w-9 sm:h-10 sm:w-10', claro = false }: { className?: string; claro?: boolean }) {
   return (
     <svg viewBox="0 0 40 40" className={className} aria-hidden="true">
       <circle cx="13" cy="13" r="11" className={claro ? 'fill-sun' : 'fill-violet'} />
@@ -15,7 +15,7 @@ export function Logo({ claro = false }: { claro?: boolean }) {
   return (
     <Link
       to="/"
-      className={`inline-flex min-h-12 items-center gap-2.5 font-display text-[28px] font-bold tracking-tight ${claro ? 'text-white' : 'text-ink'}`}
+      className={`inline-flex min-h-12 shrink-0 items-center gap-2 font-display text-[24px] sm:gap-2.5 sm:text-[28px] font-bold tracking-tight ${claro ? 'text-white' : 'text-ink'}`}
     >
       <LogoMarca claro={claro} />
       ConecTEA

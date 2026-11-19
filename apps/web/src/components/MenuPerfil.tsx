@@ -33,18 +33,18 @@ export function MenuPerfil({ sobreEscuro = false }: { sobreEscuro?: boolean }) {
     'flex min-h-12 w-full items-center rounded-full px-4 text-left font-bold text-ink hover:bg-lilac'
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative hidden sm:block">
       <button
         type="button"
         onClick={() => setAberto((a) => !a)}
         aria-expanded={aberto}
         aria-controls="menu-perfil"
         aria-label={`Perfil de ${usuario.nome}`}
-        className={`inline-flex min-h-[52px] items-center gap-2.5 rounded-full border-2 bg-transparent py-1.5 pl-1.5 pr-5 transition hover:shadow-md ${
+        className={`inline-flex min-h-[52px] items-center gap-1.5 rounded-full border-2 bg-transparent py-1.5 pl-1.5 pr-3 sm:gap-2.5 sm:pr-5 transition hover:shadow-md ${
           aberto ? 'border-sun' : sobreEscuro ? 'border-white text-white' : 'border-[#E4DED3] text-ink'
         }`}
       >
-        <span className="flex h-[42px] w-[42px] items-center justify-center rounded-full bg-sun font-display text-xl font-bold text-ink">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sun font-display text-xl font-bold text-ink">
           {inicial}
         </span>
         <span className="hidden max-w-[8rem] truncate font-extrabold sm:inline">{usuario.nome.split(' ')[0]}</span>

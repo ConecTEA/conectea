@@ -96,7 +96,7 @@ export default function Acompanhamento() {
 
       {/* Resumo */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card tom="lilac" className="md:col-span-1">
+        <Card tom="lilac" className="min-w-0 md:col-span-1">
           <p className="text-sm font-semibold text-violet">Criança</p>
           <h2 className="text-2xl">{criancaAtiva.nome}</h2>
           <p className="text-ink-soft">
@@ -105,7 +105,7 @@ export default function Acompanhamento() {
           {criancaAtiva.gostos ? <p className="mt-2 text-sm">Gosta de: {criancaAtiva.gostos}</p> : null}
         </Card>
 
-        <Card tom="lemon" className="md:col-span-2">
+        <Card tom="lemon" className="min-w-0 md:col-span-2">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-violet">Últimos 7 dias</p>
@@ -120,11 +120,11 @@ export default function Acompanhamento() {
                     : `Última atividade: há ${diasDesde} ${diasDesde === 1 ? 'dia' : 'dias'} (${dataBR(ultima.data)}).`}
               </p>
             </div>
-            <ul className="flex gap-2" aria-label="Dias com atividade nos últimos 7 dias">
+            <ul className="flex w-full justify-between gap-1 sm:w-auto sm:gap-2" aria-label="Dias com atividade nos últimos 7 dias">
               {dias.map((x, i) => (
                 <li key={i} className="flex flex-col items-center gap-1">
                   <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-full border-2 font-bold transition ${
+                    className={`flex h-8 w-8 items-center justify-center rounded-full border-2 font-bold transition sm:h-10 sm:w-10 ${
                       x.feito ? 'border-violet bg-violet text-white' : 'border-line bg-surface text-ink-soft'
                     }`}
                   >

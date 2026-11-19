@@ -91,7 +91,7 @@ function Cabecalho({
             </NavLink>
           ))}
         </nav>
-        <div className="flex items-center gap-2.5">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2.5">
           <Link
             id="carrinho-icone"
             to="/carrinho"
@@ -275,18 +275,18 @@ export function LayoutPublico() {
           Ir para o conteúdo
         </a>
         <header className={`${temBanda ? 'absolute inset-x-0 top-0' : 'relative'} z-30 ${classes}`}>
-          <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4">
+          <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-2 px-4 py-4">
             <Logo claro={escura} />
-            <nav aria-label="Principal" className="flex items-center gap-1">
-              <Link to="/loja" className={`inline-flex min-h-11 items-center rounded-full px-3.5 font-extrabold ${ativo}`}>
+            <nav aria-label="Principal" className="flex items-center gap-0.5 sm:gap-1">
+              <Link to="/loja" className={`hidden min-h-11 items-center rounded-full px-3.5 font-extrabold sm:inline-flex ${ativo}`}>
                 Loja
               </Link>
-              <Link to="/login" className={`inline-flex min-h-11 items-center rounded-full px-3.5 font-extrabold ${ativo}`}>
+              <Link to="/login" className={`inline-flex min-h-11 items-center rounded-full px-2 font-extrabold sm:px-3.5 ${ativo}`}>
                 Entrar
               </Link>
               <Link
                 to="/cadastro"
-                className="inline-flex min-h-12 items-center rounded-full bg-sun px-6 font-extrabold text-ink hover:shadow-md"
+                className="inline-flex min-h-12 items-center rounded-full bg-sun px-3.5 text-[15px] font-extrabold text-ink hover:shadow-md sm:px-6 sm:text-base"
               >
                 Criar conta
               </Link>
